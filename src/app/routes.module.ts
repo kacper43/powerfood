@@ -8,6 +8,7 @@ import { OrdersComponent } from './admin/orders/orders.component';
 import { EditMenuComponent } from './admin/edit-menu/edit-menu.component';
 import { AdressAutocompleteComponent } from './adress-autocomplete/adress-autocomplete.component';
 import { AddPositionToOrderComponent } from './add-position-to-order/add-position-to-order.component';
+import { MenuEditComponent } from './menu-edit/menu-edit.component';
 
 const routes: Routes = [
   { path: 'menu', component: MenuComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'admin/editmenu', component: EditMenuComponent},
   { path: 'autocomplete', component: AdressAutocompleteComponent},
   { path: 'add', component: AddPositionToOrderComponent},
+  { path: 'menu-edit', component: MenuEditComponent},
 
 ];
 

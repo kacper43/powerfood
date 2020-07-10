@@ -209,4 +209,8 @@ private toppings: Topping[] = [
   getToppings() {
     return this.toppings;
   }
+
+  deletePosition(id) {
+    //deleting position via firebase
+  }
 }

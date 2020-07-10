@@ -19,6 +19,7 @@ import { OrdersComponent } from './admin/orders/orders.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { AdressAutocompleteComponent } from './adress-autocomplete/adress-autocomplete.component';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { MenuEditComponent } from './menu-edit/menu-edit.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
       RegisterComponent,
       EditMenuComponent,
       OrdersComponent,
-      AdressAutocompleteComponent
+      AdressAutocompleteComponent,
+      MenuEditComponent
    ],
    imports: [
       BrowserModule,
