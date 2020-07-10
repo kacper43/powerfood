@@ -1,0 +1,6 @@
+<form fxLayout="column" fxLayoutAlign="center center">
+  <mat-form-field>
+    <input type="text" matInput placeholder="Podaj swój adres" ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)">
+  </mat-form-field>
+  <p *ngIf="distance > 0">Odległość od pizzerii: {{distance}} km</p>
+</form>

@@ -1,0 +1,15 @@
+<section class="container">
+  <div class="menu-item" *ngFor="let menuItem of menu">
+    <h3>{{menuItem.name}}</h3>
+    <h5>{{menuItem.toppings}}</h5>
+    <mat-divider></mat-divider>
+    <section fxLayout="row" fxLayoutAlign="space-evenly center">
+      <button (click)="addToOrder(menuItem.name, item.size, item.price)" class="btn" color="accent"
+      mat-raised-button *ngFor="let item of menuItem.sizes" >{{item.size}} | {{item.price}}zł </button>
+
+    </section>
+  </div>
+
+</section>
+
+<app-shopping-cart></app-shopping-cart>
