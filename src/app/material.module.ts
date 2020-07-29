@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule,
-  MatDividerModule, MatListModule, MatTableModule} from '@angular/material';
+  MatDividerModule, MatListModule, MatTableModule, MatCheckboxModule, MatToolbarModule, MatIconModule, MatBadgeModule, MatTabsModule} from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
 
@@ -15,6 +15,11 @@ import { MatSortModule } from '@angular/material/sort';
     MatListModule,
     MatTableModule,
     MatSortModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatTabsModule
   ],
   exports: [
     MatButtonModule,
@@ -25,7 +30,11 @@ import { MatSortModule } from '@angular/material/sort';
     MatListModule,
     MatTableModule,
     MatSortModule,
-
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatTabsModule
   ]
 })
 export class MaterialModule {}

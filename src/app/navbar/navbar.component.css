@@ -1,0 +1,18 @@
+.nav {
+  justify-content: space-between;
+  background-color: #bb2028;
+  color: white;
+}
+
+.address-btn {
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  border-radius: 10px;
+}
+
+.address-btn:hover {
+  color: #bb2028;
+  background-color: #efb23d;
+}

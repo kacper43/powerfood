@@ -2,14 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+
 import { AppComponent } from './app.component';
 import { MenuPositionComponent } from './menu-position/menu-position.component';
-import { AddPositionToOrderComponent } from './add-position-to-order/add-position-to-order.component';
-import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { AdressComponent } from './adress/adress.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent, AddPositionToOrderComponent } from './menu/menu.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -20,6 +19,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { AdressAutocompleteComponent } from './adress-autocomplete/adress-autocomplete.component';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { MenuEditComponent } from './menu-edit/menu-edit.component';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
@@ -27,7 +28,6 @@ import { MenuEditComponent } from './menu-edit/menu-edit.component';
       AppComponent,
       MenuPositionComponent,
       AddPositionToOrderComponent,
-      ShoppingCartComponent,
       AdressComponent,
       MenuComponent,
       OrderDetailComponent,
@@ -36,7 +36,8 @@ import { MenuEditComponent } from './menu-edit/menu-edit.component';
       EditMenuComponent,
       OrdersComponent,
       AdressAutocompleteComponent,
-      MenuEditComponent
+      MenuEditComponent,
+      NavbarComponent
    ],
    imports: [
       BrowserModule,
@@ -45,11 +46,17 @@ import { MenuEditComponent } from './menu-edit/menu-edit.component';
       MaterialModule,
       RoutesModule,
       FlexLayoutModule,
-      GooglePlaceModule
+      GooglePlaceModule,
+      MatDialogModule,
+
    ],
    providers: [],
    bootstrap: [
       AppComponent
+   ],
+   entryComponents: [
+      AddPositionToOrderComponent,
+      AdressAutocompleteComponent
    ]
 })
 export class AppModule { }

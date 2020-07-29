@@ -1,6 +1,14 @@
-<form fxLayout="column" fxLayoutAlign="center center">
+<h1 mat-dialog-title>Podaj adres</h1>
+<div mat-dialog-content>
   <mat-form-field>
-    <input type="text" matInput placeholder="Podaj swój adres" ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)">
+    <mat-label>Twój adres</mat-label>
+    <input #googleAddress type="text" matInput placeholder="Podaj swój adres" ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)">
   </mat-form-field>
-  <p *ngIf="distance > 0">Odległość od pizzerii: {{distance}} km</p>
-</form>
+  <p *ngIf="distance >= 0 && distance <= 4">Minimalna kwota zamówienia: {{minCost}} zł</p>
+  <p *ngIf="distance >= 4">Jesteś poza strefą dowozu</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="addAddress(googleAddress.value)" disabled={{!canOrder}} >Zatwierdź adres</button>
+</div>
+
+

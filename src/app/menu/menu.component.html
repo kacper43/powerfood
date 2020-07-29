@@ -1,15 +1,63 @@
-<section class="container">
-  <div class="menu-item" *ngFor="let menuItem of menu">
-    <h3>{{menuItem.name}}</h3>
-    <h5>{{menuItem.toppings}}</h5>
-    <mat-divider></mat-divider>
-    <section fxLayout="row" fxLayoutAlign="space-evenly center">
-      <button (click)="addToOrder(menuItem.name, item.size, item.price)" class="btn" color="accent"
-      mat-raised-button *ngFor="let item of menuItem.sizes" >{{item.size}} | {{item.price}}zł </button>
+<app-navbar></app-navbar>
 
-    </section>
+  <mat-tab-group mat-stretch-tabs color="warn">
+    <mat-tab *ngFor="let category of categories" label={{category.name}}>
+      <section class="container">
+      <ng-container *ngFor="let menuItem of menu">
+      <div class="menu-item" *ngIf="menuItem.category === category.name">
+        <h3>{{menuItem.name}}</h3>
+        <h5>{{menuItem.toppings}}</h5>
+        <mat-divider></mat-divider>
+        <section fxLayout="row" fxLayoutAlign="space-evenly center">
+          <button (click)="openDialog(menuItem.name, item.size, item.price)" class="btn" color="accent"
+          mat-raised-button *ngFor="let item of menuItem.sizes" >{{item.size}} | {{item.price}}zł </button>
+
+        </section>
+      </div>
+    </ng-container>
+  </section>
+    </mat-tab>
+
+</mat-tab-group>
+
+
+
+<button mat-button class={{shoppingCartBtnClass}} (click)="shoppingCartToggle()">
+  <mat-icon matBadge={{order.length}} matBadgeSize="medium" matBadgePosition="before">
+  <i class="fas fa-shopping-cart" *ngIf="isShoppingCartHidden"></i>
+  <i class="fas fa-arrow-right" *ngIf="!isShoppingCartHidden"></i>
+</mat-icon>
+</button>
+
+<div class={{shoppingCartClass}}>
+
+    <div class="thin-header">Twój koszyk</div>
+    <div class="positions">
+      <div *ngFor="let orderItem of order; index as i" class="order-item">
+        <div class="item-row-one">{{orderItem.name}} | {{orderItem.size}}<i class="fas fa-trash-alt delete-btn" (click)="deleteOrderItem(i)" ></i></div>
+
+        <div class="item-toppings">
+          <b>Dodatki:</b><br>
+          <span class="topping" *ngFor="let topping of orderItem.toppings">
+            {{topping}}<br>
+          </span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="item-row-two">
+          <div class="item-price">Łączna cena: {{orderItem.price*orderItem.quantity}} zł</div>
+          <div class="item-quantity">
+            <i class="fas fa-minus-square quantity-ctrl" (click)="lowerQuantity(orderItem)"></i>
+            <span class="margin">{{orderItem.quantity}}</span>
+            <i class="fas fa-plus-square quantity-ctrl" (click)="increaseQuantity(orderItem)"></i>
+          </div>
+        </div>
+
+
+      </div>
+
   </div>
-
-</section>
-
-<app-shopping-cart></app-shopping-cart>
+  <div class="cart-summary">
+    <span>Łączna cena zamówienia: {{fullPrice}} zł</span>
+    <button mat-raised-button (click)="showOrderDetail()" [disabled]="fullPrice < minCost">Podsumowanie zamówienia</button>
+  </div>
+</div>

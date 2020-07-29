@@ -1,3 +1,55 @@
-<p>
-  order-detail works!
-</p>
+<h1 mat-dialog-title>Podsumowanie zamówienia</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="legacy">
+    <mat-label>Imię i Nazwisko</mat-label>
+    <input matInput required>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Nr telefonu</mat-label>
+    <input matInput required>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>E-mail</mat-label>
+    <input matInput required>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Numer mieszkania</mat-label>
+    <input matInput required>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Piętro</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="Legacy">
+    <mat-label>Metoda płatności</mat-label>
+    <mat-select required>
+      <mat-option value="1">Gotówka</mat-option>
+      <mat-option value="2">Karta</mat-option>
+      <mat-option value="3">Zapłać online</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Dodatkowy komentarz</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Kod zniżkowy:</mat-label>
+    <input matInput #code>
+
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="checkCode(code.value)" style="margin-bottom: 1em;">Aktywuj kod</button>
+  <span style="margin-left: 1em">{{codeMessage}}</span>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="submitOrder()">Złóż zamówienie</button>
+  <span style="margin-left: 1em">Łączna kwota: {{fullPrice}} zł</span>
+  <span *ngIf="showGoodCoupon === true" style="margin-left: 1em">Po zniżce: {{priceAfterCoupon}}zł</span>
+</div>

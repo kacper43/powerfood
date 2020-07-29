@@ -1,0 +1,70 @@
+<h1 mat-dialog-title>Może jakieś dodatki?</h1>
+<div mat-dialog-content>
+  <h3>{{data.itemName}} | {{data.itemSize}}</h3>
+
+  <span *ngFor="let topping of data.allToppings">
+    <ng-container *ngFor="let toppingInfo of topping.sizes">
+      <span class="container" *ngIf="toppingInfo.size == data.itemSize">
+        <mat-checkbox type="checkbox" name="{{topping.name}}" (change)="addTopping($event)" value="{{toppingInfo.price}}">{{topping.name}} ({{toppingInfo.price}} zł) </mat-checkbox>
+      </span>
+    </ng-container>
+  </span>
+  <mat-divider></mat-divider>
+
+  <div class="summary">
+    <div class="total-price">Łączna cena: {{finalPrice}} zł</div>
+    <div class="add-to-order-btn"><button (click)="addToOrderItem();" mat-raised-button color="warn">Dodaj do zamówienia</button></div>
+  </div>
+
+
+</div>
+<style>
+  mat-divider {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .total-price {
+    grid-area: 1 / 1 / 2 / 2;
+    font-weight: bold;
+
+  }
+
+  .add-to-order-btn {
+    grid-area: 1 / 2 / 2 / 3;
+    justify-self: right;
+  }
+  @media screen and (max-width: 799px){
+  .container{
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media screen and (min-width: 800px){
+  .container{
+  grid-template-columns: repeat(2, 1fr);
+  margin-left: 5px;
+    margin-right: 5px;
+  }
+  }
+
+
+@media screen and (min-width: 1500px){
+  .container{
+  grid-template-columns: repeat(3, 1fr);
+  margin-left: 5px;
+    margin-right: 5px;
+  }
+  }
+
+</style>
