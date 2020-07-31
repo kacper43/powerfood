@@ -1,3 +1,24 @@
-<p>
-  orders works!
-</p>
+<mat-card *ngFor="let order of ordersList">
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{order.address}}
+      </mat-panel-title>
+      <mat-panel-description>
+        Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} | {{order.paymentMethod}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>Imie i nazwisko: {{order.name}}</p>
+    <p>Telefon: {{order.phone}}</p>
+    <p>Nr mieszkania: {{order.flatNr}}</p>
+    <p>Piętro: {{order.floor}}</p>
+    <div *ngFor="let orderItem of order.orderItems">
+      Pozycja: {{orderItem.name}} | {{orderItem.size}} | {{orderItem.price}} <br>
+      <span *ngFor="let topping of orderItem.toppings">
+        {{topping}}<br>
+      </span>
+    </div>
+  </mat-expansion-panel>
+
+</mat-card>
+<button (click)="playsound()">essa</button>

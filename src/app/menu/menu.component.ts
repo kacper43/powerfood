@@ -125,7 +125,7 @@ export class AddPositionToOrderComponent {
   addTopping() {
 
     // tslint:disable-next-line: deprecation
-    const name = event.target.name;
+    const name = event.target.name as HTMLInputElement;
 
     // tslint:disable-next-line: deprecation
     const value = event.target.value;

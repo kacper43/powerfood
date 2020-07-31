@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OrderItem } from './orderItem.model';
 import { Subject } from 'rxjs';
+import { Order } from './order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,40 @@ export class OrderService {
   private orderMinCostUpdated = new Subject<number>();
   fullPrice = 0;
   private fullPriceUpdated = new Subject<number>();
+  private orders: Array<Order> = [
+    {
+      id: 1,
+      name: 'Kacper Zaręba',
+      phone: '661661661',
+      email: 'my@email.com',
+      address: 'Krowoderskich Zuchów 12, Kraków, Polska',
+      flatNr: '1',
+      floor: '3',
+      paymentMethod: 'karta',
+      comment: 'asdasfasgedasg',
+      orderItems: [
+        {
+          name: 'Capriciosa',
+          size: '40cm',
+          toppings: ['chorizo', 'bekon', 'kukurydza'],
+          price: 48,
+          quantity: 1
+        },
+        {
+          name: 'Sos czosnkowy',
+          size: '80ml',
+          toppings: [],
+          price: 2,
+          quantity: 2
+        }
+      ],
+      fullPrice: 52,
+      orderDate: '31-07-2020',
+      orderTime: '15:30',
+      deliveryTime: '',
+      orderStatus: 'pending'
+    }
+  ];
   coupons: Array<{code: string, percentage: number}> = [
     {
       code: 'zmmxncbvlaksfhewoo',
@@ -135,5 +170,11 @@ export class OrderService {
     return this.fullPriceUpdated.asObservable();
   }
 
+  addOrder(order: Order) {
+    this.orders.push(order);
+  }
 
+  getOrders() {
+    return this.orders;
+  }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { OrderService } from '../order.service';
+import { Order } from '../order.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-order-detail',
@@ -14,6 +16,20 @@ export class OrderDetailComponent implements OnInit {
   fullPrice: number;
   codeMessage = '';
   priceAfterCoupon: number;
+  order: Order = {
+    id: 0,
+    name: '',
+    phone: '',
+    email: '',
+    address: this.orderService.getAddress(),
+    flatNr: '',
+    floor: '',
+    paymentMethod: '',
+    comment: '',
+    orderItems: [],
+    fullPrice: 0,
+    orderStatus: 'pending'
+  };
 
   constructor(private dialogRef: MatDialogRef<OrderDetailComponent>, public orderService: OrderService) { }
 
@@ -41,8 +57,24 @@ export class OrderDetailComponent implements OnInit {
       }
     }
   }
-  submitOrder() {
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+  submitOrder(form: NgForm) {
+    this.order.id = this.getRandomInt(1, 10000);
+    this.order.name = form.value.name;
+    this.order.phone = form.value.phone;
+    this.order.email = form.value.email;
+    this.order.flatNr = form.value.flat;
+    this.order.floor = form.value.floor;
+    this.order.paymentMethod = form.value.payment;
+    this.order.comment = form.value.comment;
+    this.order.orderItems =  this.orderService.getOrder();
+    this.order.fullPrice = this.orderService.getFullPrice();
+    this.orderService.addOrder(this.order);
     this.dialogRef.close();
-    alert('Tu będzie widok dla klientów z godziną dostawy itp.');
   }
 }
