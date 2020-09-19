@@ -5,7 +5,9 @@ import { OrderItem } from '../orderItem.model';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AdressAutocompleteComponent } from '../adress-autocomplete/adress-autocomplete.component';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 
 @Component({
@@ -15,11 +17,9 @@ import { OrderDetailComponent } from '../order-detail/order-detail.component';
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
-  constructor(public menuService: MenuService, public orderService: OrderService, public dialog: MatDialog) { }
-  menu = this.menuService.getMenu();
-  toppings = this.menuService.getToppings();
-  order: OrderItem[] = [];
-  private orderSub: Subscription;
+  constructor(public menuService: MenuService, public orderService: OrderService,
+              public dialog: MatDialog, public database: AngularFirestore) { }
+
   shoppingCartClass: string;
   isShoppingCartHidden: boolean;
   shoppingCartBtnClass: string;
@@ -30,6 +30,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   private minCostSub: Subscription;
   hidden = false;
   categories = [];
+  order: OrderItem[] = [];
+  private orderSub: Subscription;
+  menu: any = [];
+  toppings: any;
 
   shoppingCartToggle() {
     if (this.isShoppingCartHidden) {
@@ -56,7 +60,12 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
 
+
   ngOnInit() {
+    this.menuService.fetchMenu();
+    this.menu = this.menuService.getMenu();
+
+    this.toppings = this.menuService.getToppings();
     this.categories = this.menuService.getCategories();
     this.shoppingCartClass = 'shopping-cart hidden';
     this.isShoppingCartHidden = true;
@@ -77,6 +86,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.distance = this.orderService.getDistance();
     this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
 
+    setTimeout(() => {
+      console.log(this.menu);
+    }, 10000);
   }
 
   showOrderDetail() {

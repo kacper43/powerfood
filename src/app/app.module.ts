@@ -1,7 +1,10 @@
+import { OrderDialogComponent } from './admin/orders/order-dialog/order-dialog.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { MenuPositionComponent } from './menu-position/menu-position.component';
@@ -22,7 +25,6 @@ import { MenuEditComponent } from './menu-edit/menu-edit.component';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { NavbarComponent } from './navbar/navbar.component';
 
-
 @NgModule({
    declarations: [
       AppComponent,
@@ -37,7 +39,8 @@ import { NavbarComponent } from './navbar/navbar.component';
       OrdersComponent,
       AdressAutocompleteComponent,
       MenuEditComponent,
-      NavbarComponent
+      NavbarComponent,
+      OrderDialogComponent
    ],
    imports: [
       BrowserModule,
@@ -48,7 +51,8 @@ import { NavbarComponent } from './navbar/navbar.component';
       FlexLayoutModule,
       GooglePlaceModule,
       MatDialogModule,
-
+      AngularFireModule.initializeApp(environment.firebase),
+      AngularFirestoreModule
    ],
    providers: [],
    bootstrap: [

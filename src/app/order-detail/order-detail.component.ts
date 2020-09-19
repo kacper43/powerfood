@@ -43,17 +43,19 @@ export class OrderDetailComponent implements OnInit {
   checkCode(code) {
     console.log(code);
     for (let c of this.coupons) {
-      if (code === c.code) {
+      console.log(code + ' ? ' + c.code);
+      if (code == c.code) {
         this.activeCoupon = c.percentage;
         this.codeMessage = 'Podano poprawny kod. Otrzymujesz ' + this.activeCoupon + '% zniżki';
         this.priceAfterCoupon = this.fullPrice - (this.fullPrice * (this.activeCoupon / 100));
         this.priceAfterCoupon = parseFloat(this.priceAfterCoupon.toFixed(2));
         this.showGoodCoupon = true;
-        return 0;
+        return 1;
       } else {
         this.activeCoupon = 1;
         this.codeMessage = 'Podano błędny kod.';
         this.showGoodCoupon = false;
+        this.priceAfterCoupon = this.fullPrice;
       }
     }
   }
@@ -61,7 +63,7 @@ export class OrderDetailComponent implements OnInit {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  }
 
   submitOrder(form: NgForm) {
     this.order.id = this.getRandomInt(1, 10000);
@@ -73,7 +75,7 @@ export class OrderDetailComponent implements OnInit {
     this.order.paymentMethod = form.value.payment;
     this.order.comment = form.value.comment;
     this.order.orderItems =  this.orderService.getOrder();
-    this.order.fullPrice = this.orderService.getFullPrice();
+    this.order.fullPrice = this.priceAfterCoupon;
     this.orderService.addOrder(this.order);
     this.dialogRef.close();
   }

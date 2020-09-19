@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { OrderItem } from './orderItem.model';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Order } from './order.model';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  constructor() { }
+  constructor(private database: AngularFirestore) { }
   private order: OrderItem[] = [];
   private orderUpdated = new Subject<OrderItem[]>();
   private addressUpdated = new Subject<string>();
+  private ordersUpdated = new Subject<any[]>();
   distance: number;
   activeItem: OrderItem;
   googleAddress = 'Nie podano adresu';
@@ -19,7 +22,7 @@ export class OrderService {
   private orderMinCostUpdated = new Subject<number>();
   fullPrice = 0;
   private fullPriceUpdated = new Subject<number>();
-  private orders: Array<Order> = [
+  private orders: Array<any> = [
     {
       id: 1,
       name: 'Kacper Zaręba',
@@ -49,6 +52,38 @@ export class OrderService {
       fullPrice: 52,
       orderDate: '31-07-2020',
       orderTime: '15:30',
+      deliveryTime: '16:15',
+      orderStatus: 'accepted'
+    },
+    {
+      id: 1,
+      name: 'Patryk Żurowski',
+      phone: '696969696',
+      email: 'biuro@powerfood.pl',
+      address: 'Długa 28, Kraków',
+      flatNr: 'LU1',
+      floor: '0',
+      paymentMethod: 'gotówka',
+      comment: 'essa',
+      orderItems: [
+        {
+          name: 'Margarita',
+          size: '30cm',
+          toppings: ['chorizo', 'rukola', 'kukurydza', 'gorgonzola'],
+          price: 27,
+          quantity: 1
+        },
+        {
+          name: 'Sos bbq',
+          size: '80ml',
+          toppings: [],
+          price: 2,
+          quantity: 2
+        }
+      ],
+      fullPrice: 31,
+      orderDate: '09-09-2020',
+      orderTime: '16:35',
       deliveryTime: '',
       orderStatus: 'pending'
     }
@@ -171,10 +206,35 @@ export class OrderService {
   }
 
   addOrder(order: Order) {
-    this.orders.push(order);
+    this.database.collection('orders').add(order);
   }
 
   getOrders() {
     return this.orders;
+  }
+
+  getOrdersListener() {
+    return this.ordersUpdated.asObservable();
+  }
+  fetchOrders() {
+    let ordersBuffer = [];
+    this.database.collection('orders').snapshotChanges().subscribe( data => {
+      ordersBuffer = [];
+      data.map( a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        ordersBuffer.push(data);
+        ordersBuffer[ordersBuffer.length - 1].id = id;
+        //console.log(id, ' => ', data);
+      });
+      this.orders = ordersBuffer;
+      console.log(this.orders);
+      this.ordersUpdated.next(this.orders);
+    });
+
+  }
+
+  changeOrderState(id, state) {
+    this.database.collection('orders').doc(id).update({orderStatus: state});
   }
 }
