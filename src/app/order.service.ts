@@ -15,6 +15,7 @@ export class OrderService {
   private orderUpdated = new Subject<OrderItem[]>();
   private addressUpdated = new Subject<string>();
   private ordersUpdated = new Subject<any[]>();
+  private statusUpdated = new Subject<any>();
   distance: number;
   activeItem: OrderItem;
   googleAddress = 'Nie podano adresu';
@@ -22,111 +23,100 @@ export class OrderService {
   private orderMinCostUpdated = new Subject<number>();
   fullPrice = 0;
   private fullPriceUpdated = new Subject<number>();
-  private orders: Array<any> = [
-    {
-      id: 1,
-      name: 'Kacper Zaręba',
-      phone: '661661661',
-      email: 'my@email.com',
-      address: 'Krowoderskich Zuchów 12, Kraków, Polska',
-      flatNr: '1',
-      floor: '3',
-      paymentMethod: 'karta',
-      comment: 'asdasfasgedasg',
-      orderItems: [
-        {
-          name: 'Capriciosa',
-          size: '40cm',
-          toppings: ['chorizo', 'bekon', 'kukurydza'],
-          price: 48,
-          quantity: 1
-        },
-        {
-          name: 'Sos czosnkowy',
-          size: '80ml',
-          toppings: [],
-          price: 2,
-          quantity: 2
-        }
-      ],
-      fullPrice: 52,
-      orderDate: '31-07-2020',
-      orderTime: '15:30',
-      deliveryTime: '16:15',
-      orderStatus: 'accepted'
-    },
-    {
-      id: 1,
-      name: 'Patryk Żurowski',
-      phone: '696969696',
-      email: 'biuro@powerfood.pl',
-      address: 'Długa 28, Kraków',
-      flatNr: 'LU1',
-      floor: '0',
-      paymentMethod: 'gotówka',
-      comment: 'essa',
-      orderItems: [
-        {
-          name: 'Margarita',
-          size: '30cm',
-          toppings: ['chorizo', 'rukola', 'kukurydza', 'gorgonzola'],
-          price: 27,
-          quantity: 1
-        },
-        {
-          name: 'Sos bbq',
-          size: '80ml',
-          toppings: [],
-          price: 2,
-          quantity: 2
-        }
-      ],
-      fullPrice: 31,
-      orderDate: '09-09-2020',
-      orderTime: '16:35',
-      deliveryTime: '',
-      orderStatus: 'pending'
-    }
-  ];
-  coupons: Array<{code: string, percentage: number}> = [
-    {
-      code: 'zmmxncbvlaksfhewoo',
-      percentage: 69
-    },
-    {
-      code: 'bulibuli',
-      percentage: 40
-    },
-    {
-      code: 'traficar',
-      percentage: 69
-    }
-  ];
+  private orders: Array<any>;
+  private currentDate: any;
+  private currentTime: any;
+  private currentHour: string;
+  private currentMinutes: string;
+  coupons: Array<{code: string, percentage: number}> = [];
+  zones: Array<{distance: number, minCost: number}> = [];
+  restaurantStatus: any;
+
+  checkRestaurantStatus() {
+
+    this.database.collection('status').doc('status').snapshotChanges().subscribe( a => {
+
+        // tslint:disable-next-line: no-shadowed-variable
+      const data = a.payload.data() as {status: any};
+      // console.log(data);
+      this.restaurantStatus = data.status;
+      this.statusUpdated.next(data.status);
 
 
+    }, error => {
+      // console.log(error);
+    });
+  }
 
-  zones: Array<{distance: number, minCost: number}> = [
-    {
-      distance: 0.5,
-      minCost: 15
-    },
-    {
-      distance: 1,
-      minCost: 20
-    },
-    {
-      distance: 2,
-      minCost: 25
-    },
-    {
-      distance: 3,
-      minCost: 35
-    },
-    {
-      distance: 4,
-      minCost: 40
-    },
-  ];
+  getRestaurantStatus() {
+    return this.restaurantStatus;
+  }
+
+  fetchCoupons() {
+    let coupon: any;
+    this.coupons = [];
+    this.database.collection('coupons').get().toPromise().then( querySnapshot => {
+      querySnapshot.forEach( doc => {
+        coupon = doc.data();
+        this.coupons.push({
+          code: coupon.code,
+          percentage: coupon.percentage
+        });
+      });
+    });
+  }
+
+  fetchZones() {
+    let zone: any;
+    this.zones = [];
+    this.database.collection('zones', ref => ref.orderBy('distance')).get().toPromise().then( querySnapshot => {
+      querySnapshot.forEach( doc => {
+        zone = doc.data();
+        this.zones.push({
+          distance: zone.distance,
+          minCost: zone.minCost
+        });
+      });
+    });
+  }
+
+  addCoupon(couponCode: string, couponPercentage: number) {
+    this.database.collection('coupons').add({
+      code: couponCode,
+      percentage: couponPercentage
+    });
+  }
+
+  addZone(zoneDistance: number, zoneMinCost: number) {
+    this.database.collection('zones').add({
+      distance: zoneDistance,
+      minCost: zoneMinCost
+    });
+  }
+
+  setCurrentDate() {
+    const date = new Date();
+    this.currentTime = (('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)).toString();
+    this.currentHour = ('0' + date.getHours()).slice(-2);
+    this.currentMinutes = ('0' + date.getMinutes()).slice(-2);
+    this.currentDate =
+    (date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2)).toString();
+  }
+
+  getHours() {
+    return this.currentHour;
+  }
+
+  getMinutes() {
+    return this.currentMinutes;
+  }
+  getCurrentDate() {
+    return this.currentDate;
+  }
+
+  getCurrentTime() {
+    return this.currentTime;
+  }
 
   getCoupons() {
     return this.coupons;
@@ -182,16 +172,18 @@ export class OrderService {
     return this.orderUpdated.asObservable();
   }
 
+  getRestaurantStatusListener() {
+    return this.statusUpdated.asObservable();
+  }
+
   deleteOrderItem(index) {
-    console.log('index: ' + index);
     this.order.splice(index, 1);
-    console.log(this.order);
     this.orderUpdated.next(this.order);
   }
 
   calcFullPrice() {
     this.fullPrice = 0;
-    for (let orderItem of this.order) {
+    for (const orderItem of this.order) {
       this.fullPrice += (orderItem.price * orderItem.quantity);
     }
     this.fullPriceUpdated.next(this.fullPrice);
@@ -205,8 +197,8 @@ export class OrderService {
     return this.fullPriceUpdated.asObservable();
   }
 
-  addOrder(order: Order) {
-    this.database.collection('orders').add(order);
+  addOrder(order: Order, id) {
+    this.database.collection('orders').doc(id.toString()).set(order);
   }
 
   getOrders() {
@@ -218,23 +210,27 @@ export class OrderService {
   }
   fetchOrders() {
     let ordersBuffer = [];
-    this.database.collection('orders').snapshotChanges().subscribe( data => {
+    this.setCurrentDate();
+    this.database.collection('orders', ref => ref.where('orderDate', '==', this.currentDate)
+    .orderBy('orderTime', 'desc')).snapshotChanges().subscribe( data => {
       ordersBuffer = [];
       data.map( a => {
+        // tslint:disable-next-line: no-shadowed-variable
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
         ordersBuffer.push(data);
         ordersBuffer[ordersBuffer.length - 1].id = id;
-        //console.log(id, ' => ', data);
       });
       this.orders = ordersBuffer;
-      console.log(this.orders);
       this.ordersUpdated.next(this.orders);
+    }, error => {
+      // console.log(error);
     });
 
   }
 
-  changeOrderState(id, state) {
+  changeOrderState(id, delivery, state) {
     this.database.collection('orders').doc(id).update({orderStatus: state});
+    this.database.collection('orders').doc(id).update({deliveryTime: delivery});
   }
 }

@@ -24,6 +24,10 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { MenuEditComponent } from './menu-edit/menu-edit.component';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { NavbarComponent } from './navbar/navbar.component';
+import { OrderStatusComponent } from './order-status/order-status.component';
+import { RestaurantClosedDialogComponent } from './restaurant-closed-dialog/restaurant-closed-dialog.component';
+import { AuthService } from './auth/auth.service';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 @NgModule({
    declarations: [
@@ -40,7 +44,9 @@ import { NavbarComponent } from './navbar/navbar.component';
       AdressAutocompleteComponent,
       MenuEditComponent,
       NavbarComponent,
-      OrderDialogComponent
+      OrderDialogComponent,
+      OrderStatusComponent,
+      RestaurantClosedDialogComponent
    ],
    imports: [
       BrowserModule,
@@ -52,15 +58,19 @@ import { NavbarComponent } from './navbar/navbar.component';
       GooglePlaceModule,
       MatDialogModule,
       AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule
+      AngularFirestoreModule,
+      AngularFireAuthModule
    ],
-   providers: [],
+   providers: [AuthService, AngularFireAuth],
    bootstrap: [
       AppComponent
    ],
    entryComponents: [
       AddPositionToOrderComponent,
-      AdressAutocompleteComponent
+      AdressAutocompleteComponent,
+      OrderDetailComponent,
+      OrderDialogComponent,
+      RestaurantClosedDialogComponent
    ]
 })
 export class AppModule { }

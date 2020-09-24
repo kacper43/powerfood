@@ -1,3 +1,4 @@
+<button (click)="logout()">logout</button>
 <mat-card *ngFor="let order of ordersList">
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'accepted'">
     <mat-expansion-panel-header style="background-color: greenyellow;">
@@ -5,7 +6,34 @@
         {{order.address}}
       </mat-panel-title>
       <mat-panel-description>
-        Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} | {{order.paymentMethod}}
+        Zamówienie przyjęto: {{order.orderTime}} | Czas realizacji: {{order.deliveryTime}} min | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>Imie i nazwisko: {{order.name}}</p>
+    <p>Email: {{order.email}}</p>
+    <p>Telefon: {{order.phone}}</p>
+    <p>Nr mieszkania: {{order.flatNr}}</p>
+    <p>Piętro: {{order.floor}}</p>
+    <p>Komentarz: {{order.comment}}</p>
+    <div *ngFor="let orderItem of order.orderItems">
+      Pozycja: {{orderItem.name}} {{orderItem.size}} | Cena: {{orderItem.price}} zł x {{orderItem.quantity}} <br>
+      <span *ngIf="orderItem.toppings.length > 0">
+      <b>Dodatki:</b><br>
+      <span class="toppings" *ngFor="let topping of orderItem.toppings">
+        {{topping}}<br>
+      </span>
+    </span>
+      <br>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'declined'">
+    <mat-expansion-panel-header style="background-color: #FF5252;">
+      <mat-panel-title>
+        {{order.address}}
+      </mat-panel-title>
+      <mat-panel-description>
+        ZAMÓWIENIE ODRZUCONE | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>Imie i nazwisko: {{order.name}}</p>
@@ -21,12 +49,12 @@
   </mat-expansion-panel>
 
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'pending'" (click)="acceptOrder(order)" >
-    <mat-expansion-panel-header style="background-color: blue;" >
+    <mat-expansion-panel-header class="pending-order" >
       <mat-panel-title>
         {{order.address}}
       </mat-panel-title>
       <mat-panel-description>
-        Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} | {{order.paymentMethod}}
+        Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -34,4 +62,4 @@
 </mat-card>
 
 
-<button (click)="addToDb()">ADD</button>
+

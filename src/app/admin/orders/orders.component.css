@@ -2,3 +2,28 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.pending-order {
+  background-color: #4285f4;
+  animation-name: bg-color;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.toppings {
+  margin-left: 1em;
+}
+
+@keyframes bg-color {
+  0% {
+    background-color: #4285f4;
+  }
+
+  50% {
+    background-color: #ffffff;
+  }
+
+  100% {
+    background-color: #4285f4;
+  }
+}

@@ -5,6 +5,7 @@ import { OrderService } from 'src/app/order.service';
 import { Order } from 'src/app/order.model';
 import { MatDialog } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 @Component({
@@ -17,12 +18,18 @@ export class OrdersComponent implements OnInit, OnDestroy {
   ordersUpdated: Subscription;
   newOrderCheck;
   newOrders = false;
-  const audio = new Audio();
-  constructor(public orderService: OrderService, public dialog: MatDialog, public database: AngularFirestore) { }
+  audio = new Audio();
+  isAuth = false;
+  authSubscription: Subscription;
+  constructor(public orderService: OrderService, public dialog: MatDialog, public database: AngularFirestore,
+              private authService: AuthService) { }
 
   ngOnInit() {
-    const date = new Date();
-    const currentDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+    // this.orderService.addZone(0.5, 15);
+    this.authSubscription = this.authService.authChange.subscribe(authStatus => {
+      this.isAuth = authStatus;
+    });
+    this.orderService.setCurrentDate();
     this.orderService.fetchOrders();
     this.ordersList = this.orderService.getOrders();
     this.ordersUpdated = this.orderService.getOrdersListener().subscribe((orders: Array<any>) => {
@@ -38,15 +45,18 @@ export class OrdersComponent implements OnInit, OnDestroy {
     if (this.newOrderCheck) {
       clearInterval(this.newOrderCheck);
     }
+    this.authSubscription.unsubscribe();
   }
 
   playSound() {
     this.audio.play();
   }
 
+  logout() {
+    this.authService.logout();
+  }
   addToDb() {
-    let menua =
-    {id: 10,
+    const menua = {id: 10,
       name: 'Spinaci con polo',
       toppings: 'Sos śmietanowy, szpinak, kurczak, suszone pomidory, czosnek, gorgonzola D.O.P.',
       sizes: [
@@ -71,8 +81,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   acceptOrder(order) {
-    this.orderService.changeOrderState(order.id, 'accepted');
-    //this.dialog.open(OrderDialogComponent);
+    this.dialog.open(OrderDialogComponent, {
+      data: order
+    });
 
   }
 }

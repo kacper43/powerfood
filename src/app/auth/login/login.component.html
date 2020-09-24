@@ -1,13 +1,18 @@
 <section>
-  <form fxLayout="column" fxLayoutAlign="center center">
-    <h3>Witaj w panelu administratora. Zaloguj się, aby kontynuować.</h3>
+  <form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="onSubmit(form)">
     <mat-form-field>
-      <input type="text" matInput placeholder="Login">
+      <input type="text" matInput placeholder="Login" ngModel name="login" required minlength="8" #loginInput="ngModel">
+      <mat-error *ngIf="loginInput.value?.length === 0">To pole nie może pozostać puste</mat-error>
+      <mat-error *ngIf="loginInput.value?.length !== 0">Nieprawidłowy login</mat-error>
+      <mat-hint>Min. 8 znaków</mat-hint><mat-hint align="end">{{loginInput.value?.length}} / 8</mat-hint>
     </mat-form-field>
     <mat-form-field>
-      <input type="password" matInput placeholder="Hasło">
+      <input type="password" matInput placeholder="Hasło" ngModel name="password" required minlength="8" #passwordInput="ngModel">
+      <mat-error *ngIf="passwordInput.value?.length === 0">To pole nie może pozostać puste</mat-error>
+      <mat-error *ngIf="passwordInput.value?.length !== 0">Hasło jest za krótkie</mat-error>
+      <mat-hint>Min. 8 znaków</mat-hint><mat-hint align="end">{{passwordInput.value?.length}} / 8</mat-hint>
     </mat-form-field>
-    <button mat-raised-button color="warn">Zaloguj się</button>
+    <button type="submit" mat-raised-button color="accent">Logowanie</button>
   </form>
 </section>
 

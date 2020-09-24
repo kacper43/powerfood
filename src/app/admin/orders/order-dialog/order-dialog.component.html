@@ -1,3 +1,37 @@
-<p>
-  order-dialog works!
-</p>
+<h1 mat-dialog-title>Dane zamówienia</h1>
+<div mat-dialog-content>
+  <div>Imie i nazwisko: {{order.name}}</div>
+  <div>Email: {{order.email}}</div>
+  <div>Telefon: {{order.phone}}</div>
+  <div>Nr mieszkania: {{order.flatNr}}</div>
+  <div>Piętro: {{order.floor}}</div>
+  <div>Komentarz: {{order.comment}}</div><br>
+  <div *ngFor="let orderItem of order.orderItems">
+    Pozycja: {{orderItem.name}} {{orderItem.size}} | Cena: {{orderItem.price}} zł x {{orderItem.quantity}} <br>
+    <span *ngIf="orderItem.toppings.length > 0">
+    <b>Dodatki:</b><br>
+    <span class="toppings" *ngFor="let topping of orderItem.toppings">
+      {{topping}}<br>
+    </span>
+  </span>
+  <br>
+</div>
+
+<div mat-dialog-actions>
+  <mat-form-field appearance="legacy">
+    <mat-label>Czas dostawy</mat-label>
+    <mat-select name="deliveryTime" [(ngModel)]='selectedValue'>
+      <mat-option value="10">10 min</mat-option>
+      <mat-option value="15">15 min</mat-option>
+      <mat-option value="20">20 min</mat-option>
+      <mat-option value="30">30 min</mat-option>
+      <mat-option value="45">45 min</mat-option>
+      <mat-option value="60">60 min</mat-option>
+      <mat-option value="75">75 min</mat-option>
+      <mat-option value="90">90 min</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button color="accept" (click)="acceptOrder(order.id, selectedValue)">Akceptuj zamówienie</button>
+
+  <button mat-raised-button color="warn" (click)="declineOrder(order.id)">ODRZUĆ</button>
+</div>

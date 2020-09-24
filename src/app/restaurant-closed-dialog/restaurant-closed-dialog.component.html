@@ -1,0 +1,18 @@
+<div *ngIf="dialogInfo.info == 'closed'">
+  <h2>Restauracja zamknięta</h2>
+  Zapraszamy do składania zamówień telefonicznie w godz:<br><br>
+  Poniedziałek: 12:00 - 22:00<br>
+  Wtorek: 12:00 - 22:00<br>
+  Środa: 12:00 - 22:00<br>
+  Czwartek: 12:00 - 00:00<br>
+  Piątek: 12:00 - 02:00<br>
+  Sobota: 12:00 - 02:00<br>
+  Niedziela: 12:00 - 22:00
+</div>
+
+<div *ngIf="dialogInfo.info == 'busy'">
+  <h2>Restauracja nie przyjmuje w tej chwili nowych zamówień</h2>
+  Powodem może być awaria lub zbyt duża liczba aktywnych zamówień.<br>
+  Prosimy spróbować później :)
+
+</div>

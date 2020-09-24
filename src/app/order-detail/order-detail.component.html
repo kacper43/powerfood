@@ -40,18 +40,22 @@
     <textarea matInput name="comment" ngModel></textarea>
   </mat-form-field>
   <br>
-  <mat-form-field appearance="legacy">
+  <mat-form-field appearance="legacy" class="code-input">
     <mat-label>Kod zniżkowy:</mat-label>
     <input matInput #code name="code" ngModel>
 
   </mat-form-field>
-  <button mat-raised-button color="accent" (click)="checkCode(code.value)" style="margin-bottom: 1em;">Aktywuj kod</button>
-  <span style="margin-left: 1em">{{codeMessage}}</span>
-
+  <button type="button" mat-raised-button color="accent" (click)="checkCode(code.value)" class="code-btn">Aktywuj kod</button>
+  <div style="margin-left: 1em">{{codeMessage}}</div>
+  <mat-checkbox required ngModel name="rodo" #tooltip="matTooltip"
+  matTooltip="Wyrażam zgodę na przetwarzanie moich danych osobowych w celu realizacji zamówienia zgodnie z art 6 ust 1 lit. a Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (ogólne rozporządzenie o ochronie danych)."
+  [matTooltipPosition]="position.value">
+   Wyrażam zgodę na przetwarzanie moich danych osobowych
+  </mat-checkbox>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button [disabled]="f.invalid" type="submit">Złóż zamówienie</button>
-  <span style="margin-left: 1em">Łączna kwota: {{fullPrice}} zł</span>
+  <button  style="margin-right: 1em" mat-raised-button [disabled]="f.invalid" type="submit" [routerLink]="['/orderstatus/', generatedId]">Złóż zamówienie</button>
+  <span>Łączna kwota: {{fullPrice}} zł</span>
   <span *ngIf="showGoodCoupon === true" style="margin-left: 1em">Po zniżce: {{priceAfterCoupon}}zł</span>
 </div>
 </form>

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { RestaurantClosedDialogComponent } from '../restaurant-closed-dialog/restaurant-closed-dialog.component';
 
 
 @Component({
@@ -32,8 +33,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   categories = [];
   order: OrderItem[] = [];
   private orderSub: Subscription;
+  private statusUpdated: Subscription;
   menu: any = [];
   toppings: any;
+  hour: string;
+  minutes: string;
+  restaurantStatus: any;
+
+
 
   shoppingCartToggle() {
     if (this.isShoppingCartHidden) {
@@ -62,35 +69,76 @@ export class MenuComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.menuService.fetchMenu();
-    this.menu = this.menuService.getMenu();
+    // this.menuService.addCategory('Sosy i napoje', ['80ml', '0,33L', '0,85L']);
+    // this.menuService.addTopping('szynka', [
+    //   {
+    //     size: '30cm',
+    //     price: 4
+    //   },
+    //   {
+    //     size: '40cm',
+    //     price: 5
+    //   },
+    //   {
+    //     size: '50cm',
+    //     price: 6
+    //   }
+    // ]);
+    this.orderService.checkRestaurantStatus();
+    this.restaurantStatus = this.orderService.getRestaurantStatus();
+    this.statusUpdated = this.orderService.getRestaurantStatusListener().subscribe((resStatus: any) => {
+      this.restaurantStatus = resStatus;
+     // console.log(this.restaurantStatus);
 
-    this.toppings = this.menuService.getToppings();
-    this.categories = this.menuService.getCategories();
-    this.shoppingCartClass = 'shopping-cart hidden';
-    this.isShoppingCartHidden = true;
-    this.shoppingCartBtnClass = 'shopping-cart-btn btn-hidden';
-    this.orderService.getOrder();
-    this.orderSub = this.orderService.getOrderUpdatedListener().subscribe((order: OrderItem[]) => {
-      this.order = order;
-    });
-    this.orderService.getMinCost();
-    this.minCostSub = this.orderService.getMinCostUpdatedListener().subscribe((cost: number) => {
-      this.minCost = cost;
-    });
-    this.orderService.getFullPrice();
-    this.fullPriceSub = this.orderService.getFullPriceListener().subscribe((price: number) => {
-      this.fullPrice = price;
+      this.orderService.setCurrentDate();
+      this.hour = this.orderService.getHours();
+      if (this.hour >= '12' && this.hour < '22') {
+
+        if (this.restaurantStatus) {
+          this.menuService.fetchToppings();
+          this.menuService.fetchCategories();
+          this.menuService.fetchMenu();
+          this.menu = this.menuService.getMenu();
+          this.orderService.fetchCoupons();
+          this.toppings = this.menuService.getToppings();
+          this.categories = this.menuService.getCategories();
+          this.shoppingCartClass = 'shopping-cart hidden';
+          this.isShoppingCartHidden = true;
+          this.shoppingCartBtnClass = 'shopping-cart-btn btn-hidden';
+          this.orderService.getOrder();
+          this.orderSub = this.orderService.getOrderUpdatedListener().subscribe((order: OrderItem[]) => {
+            this.order = order;
+          });
+          this.orderService.getMinCost();
+          this.minCostSub = this.orderService.getMinCostUpdatedListener().subscribe((cost: number) => {
+            this.minCost = cost;
+          });
+          this.orderService.getFullPrice();
+          this.fullPriceSub = this.orderService.getFullPriceListener().subscribe((price: number) => {
+            this.fullPrice = price;
+          });
+
+          this.distance = this.orderService.getDistance();
+          this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
+        } else {
+          this.dialog.open(RestaurantClosedDialogComponent, {
+            data: {
+              info: 'busy'
+            },
+            disableClose: true
+          });
+        }
+      } else {
+        this.dialog.open(RestaurantClosedDialogComponent, {
+          data: {
+            info: 'closed'
+          },
+          disableClose: true,
+        });
+      }
     });
 
-    this.distance = this.orderService.getDistance();
-    this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
-
-    setTimeout(() => {
-      console.log(this.menu);
-    }, 10000);
   }
-
   showOrderDetail() {
     this.dialog.open(OrderDetailComponent);
   }
@@ -115,7 +163,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
   getShoppingCart() {
     this.order = this.orderService.getOrder();
-    console.log(this.order);
   }
 }
 
@@ -134,33 +181,25 @@ export class AddPositionToOrderComponent {
     this.myData = data;
   }
 
-  addTopping() {
+  addTopping(event) {
+    const name = event.source.name;
+    const value = event.source.value;
 
-    // tslint:disable-next-line: deprecation
-    const name = event.target.name as HTMLInputElement;
-
-    // tslint:disable-next-line: deprecation
-    const value = event.target.value;
-
-    // tslint:disable-next-line: deprecation
-    if (event.target.checked) {
+    if (event.checked) {
       this.finalPrice += Number(value);
       this.chosenToppings.push(name);
-      console.log(this.chosenToppings);
     } else {
       this.finalPrice -= Number(value);
-      // tslint:disable-next-line: prefer-for-of
+
       for (let i = 0; i < this.chosenToppings.length; i++) {
         if (this.chosenToppings[i] === name) {
           this.chosenToppings.splice(i, 1);
         }
       }
-      console.log(this.chosenToppings);
     }
   }
 
   addToOrderItem() {
-    console.log(this.myData.itemName, this.myData.itemSize);
     this.orderData.name = this.myData.itemName;
     this.orderData.size = this.myData.itemSize;
     this.orderData.toppings = this.chosenToppings;
@@ -173,8 +212,6 @@ export class AddPositionToOrderComponent {
 
   addToShoppingCart(orderItem: OrderItem) {
     this.orderService.add(orderItem);
-    console.log(orderItem);
     const or = this.orderService.getOrder();
-    console.log(or);
   }
 }

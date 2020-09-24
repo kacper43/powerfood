@@ -12,114 +12,64 @@ export class MenuService {
 
 constructor(private database: AngularFirestore) { }
 private menu: any = [];
+categories: Array<{name: string, sizes: Array<string>}> = [];
+
 fetchMenu() {
   this.database.collection('menu').get().toPromise().then( querySnapshot => {
     querySnapshot.forEach( doc => {
       this.menu.push(doc.data());
       this.menu[this.menu.length - 1].id = doc.id;
-      console.log(doc.id, ' => ', doc.data());
-    })
-  })
-  console.log(this.menu);
+      // console.log(doc.id, ' => ', doc.data());
+    });
+  });
+  // console.log(this.menu);
 
 }
 // tslint:disable-next-line: member-ordering
 private toppings: Topping[] = [
-  {
-    id: 1,
-    name: 'pieczarki',
-    sizes: [
-      {
-        size: '30cm',
-        price: 3
-      },
-      {
-        size: '40cm',
-        price: 4
-      },
-      {
-        size: '50cm',
-        price: 5
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: 'pomidor',
-    sizes: [
-      {
-        size: '30cm',
-        price: 3
-      },
-      {
-        size: '40cm',
-        price: 4
-      },
-      {
-        size: '50cm',
-        price: 5
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'szynka',
-    sizes: [
-      {
-        size: '30cm',
-        price: 4
-      },
-      {
-        size: '40cm',
-        price: 5
-      },
-      {
-        size: '50cm',
-        price: 6
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'rukola',
-    sizes: [
-      {
-        size: '30cm',
-        price: 2
-      },
-      {
-        size: '40cm',
-        price: 3
-      },
-      {
-        size: '50cm',
-        price: 4
-      },
-      {
-        size: '500ml',
-        price: 2
-      }
-    ]
-  }
 ];
 
-categories: Array<{id: number, name: string, sizes: Array<string>}> = [
-  {
-    id: 1,
-    name: 'Pizza',
-    sizes: ['30cm', '40cm', '50cm']
-  },
-  {
-    id: 2,
-    name: 'Makarony',
-    sizes: ['500ml']
-  },
-  {
-    id: 3,
-    name: 'Sosy i napoje',
-    sizes: ['80ml', '0,33L', '0,85L']
-  },
-];
+  fetchToppings() {
+    let topping: any;
+    this.toppings = [];
+    this.database.collection('toppings').get().toPromise().then( querySnapshot => {
+      querySnapshot.forEach( doc => {
+        topping = doc.data();
+        this.toppings.push({
+          name: topping.name,
+          sizes: topping.sizes
+        });
+      });
+    });
+  }
+
+  addTopping(toppingName: string, toppingSizes: Array<{size: string, price: number}>) {
+    this.database.collection('toppings').add({
+      name: toppingName,
+      sizes: toppingSizes
+    });
+  }
+
+  addCategory(catName: string, catSizes: Array<string>) {
+    this.database.collection('categories').add({
+      name: catName,
+      sizes: catSizes
+    });
+  }
+
+  fetchCategories() {
+    let cat: any;
+    this.categories = [];
+    this.database.collection('categories').get().toPromise().then( querySnapshot => {
+      querySnapshot.forEach( doc => {
+        cat = doc.data();
+        this.categories.push({
+          name: cat.name,
+          sizes: cat.sizes
+        });
+      });
+    });
+  }
 
   getMenu() {
     return this.menu;

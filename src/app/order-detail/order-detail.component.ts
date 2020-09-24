@@ -3,6 +3,9 @@ import { MatDialogRef } from '@angular/material';
 import { OrderService } from '../order.service';
 import { Order } from '../order.model';
 import { NgForm } from '@angular/forms';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { FormControl } from '@angular/forms';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-order-detail',
@@ -10,11 +13,12 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
+  generatedId: any;
   coupons = [];
   activeCoupon = 1;
   showGoodCoupon = false;
   fullPrice: number;
-  codeMessage = '';
+  codeMessage = ' ';
   priceAfterCoupon: number;
   order: Order = {
     id: 0,
@@ -31,20 +35,25 @@ export class OrderDetailComponent implements OnInit {
     orderStatus: 'pending'
   };
 
-  constructor(private dialogRef: MatDialogRef<OrderDetailComponent>, public orderService: OrderService) { }
+  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  position = new FormControl(this.positionOptions[1]);
+
+  constructor(private dialogRef: MatDialogRef<OrderDetailComponent>,
+              public orderService: OrderService, public database: AngularFirestore) { }
 
   ngOnInit() {
     this.coupons = this.orderService.getCoupons();
     this.fullPrice = this.orderService.getFullPrice();
-    console.log(this.coupons[0].code);
+    // console.log(this.coupons[0].code);
     this.priceAfterCoupon = this.fullPrice;
+    this.generatedId = this.database.createId();
   }
 
   checkCode(code) {
-    console.log(code);
-    for (let c of this.coupons) {
-      console.log(code + ' ? ' + c.code);
-      if (code == c.code) {
+   // console.log(code);
+    for (const c of this.coupons) {
+    //  console.log(code + ' ? ' + c.code);
+      if (code === c.code) {
         this.activeCoupon = c.percentage;
         this.codeMessage = 'Podano poprawny kod. Otrzymujesz ' + this.activeCoupon + '% zniżki';
         this.priceAfterCoupon = this.fullPrice - (this.fullPrice * (this.activeCoupon / 100));
@@ -56,6 +65,7 @@ export class OrderDetailComponent implements OnInit {
         this.codeMessage = 'Podano błędny kod.';
         this.showGoodCoupon = false;
         this.priceAfterCoupon = this.fullPrice;
+
       }
     }
   }
@@ -66,6 +76,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   submitOrder(form: NgForm) {
+    this.orderService.setCurrentDate();
     this.order.id = this.getRandomInt(1, 10000);
     this.order.name = form.value.name;
     this.order.phone = form.value.phone;
@@ -76,7 +87,10 @@ export class OrderDetailComponent implements OnInit {
     this.order.comment = form.value.comment;
     this.order.orderItems =  this.orderService.getOrder();
     this.order.fullPrice = this.priceAfterCoupon;
-    this.orderService.addOrder(this.order);
+    this.order.orderDate = this.orderService.getCurrentDate();
+    // console.log(this.order.orderDate);
+    this.order.orderTime = this.orderService.getCurrentTime();
+    this.orderService.addOrder(this.order, this.generatedId);
     this.dialogRef.close();
   }
 }

@@ -33,6 +33,7 @@ export class AdressAutocompleteComponent implements OnInit {
   constructor(public orderService: OrderService, private dialogRef: MatDialogRef<AdressAutocompleteComponent>) { }
 
   ngOnInit() {
+    this.orderService.fetchZones();
     this.zones = this.orderService.getZones();
   }
 
@@ -53,7 +54,7 @@ export class AdressAutocompleteComponent implements OnInit {
     this.location = this.location.split(', ');
     this.address.lat = this.location[0].substr(1);
     this.address.lng = this.location[1].substr(0, this.location[1].length - 1);
-    console.log(this.address);
+    // console.log(this.address);
     this.calculateDistance(this.pizzeriaLocation.lat, this.pizzeriaLocation.lng, this.address.lat, this.address.lng);
 
   }
@@ -68,9 +69,9 @@ export class AdressAutocompleteComponent implements OnInit {
   }
 
   getZone(dist) {
-    console.log(dist);
+  //  console.log(dist);
     if (dist >= 0.00 && dist < 0.01) {
-      console.log(this.zones[0].minCost);
+    //  console.log(this.zones[0].minCost);
       this.canOrder = true;
       this.orderService.setMinCost(this.zones[0].minCost);
       return this.zones[0].minCost;

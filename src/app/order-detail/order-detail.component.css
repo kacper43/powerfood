@@ -1,42 +1,32 @@
 mat-form-field {
-  width: 85%;
-  min-width: 500px;
-  margin-left: 2em;
-  margin-right: 2em;
+  width: 100%;
 }
 
-@media screen and (max-width: 799px){
-  mat-form-field {
-    width: 90%;
-    min-width: 350px;
-    margin-left: 1em;
-    margin-right: 1em;
-  }
+.code-input {
+  width: 100%;
 }
 
-@media screen and (min-width: 800px){
-  mat-form-field {
-    width: 85%;
-    min-width: 450px;
-    margin-left: 2em;
-    margin-right: 2em;
-  }
+.code-btn {
+  float: right;
+}
+::ng-deep .mat-checkbox-layout {
+  white-space: normal !important;
 }
 
 @media screen and (min-width: 1100px){
   mat-form-field {
-    width: 85%;
-    min-width: 500px;
-    margin-left: 2em;
-    margin-right: 2em;
+    width: 600px;
   }
 }
 
 @media screen and (min-width: 1500px){
   mat-form-field {
-    width: 85%;
-    min-width: 700px;
-    margin-left: 2em;
-    margin-right: 2em;
+    width: 1000px;
+  }
+}
+
+@media only screen and (hover: none) and (pointer: coarse){
+  mat-form-field {
+    width: 100%;
   }
 }
