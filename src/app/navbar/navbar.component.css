@@ -1,7 +1,15 @@
 .nav {
-  justify-content: space-between;
+
   background-color: #bb2028;
   color: white;
+  display: grid;
+  justify-items: center;
+  margin-bottom: 0.5em;
+}
+
+.logo {
+  font-family: "coco", "arial", sans-serif;
+  color: #efb23d;
 }
 
 .address-btn {
@@ -10,9 +18,24 @@
   padding-left: 0.5em;
   padding-right: 0.5em;
   border-radius: 10px;
+  margin-bottom: 0.5em;
+  text-align: center;
+  font-size: 14px;
 }
 
 .address-btn:hover {
   color: #bb2028;
   background-color: #efb23d;
 }
+
+@media screen and (min-width: 800px){
+  .address-btn {
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 1200px){
+  .address-btn {
+    font-size: 22px;
+  }
+}
+

@@ -10,6 +10,15 @@
   animation-iteration-count: infinite;
 }
 
+.block {
+  background-color: rgb(175, 46, 46);
+  color: white;
+}
+
+.allow {
+  background-color: rgb(42, 141, 42);
+  color: white;
+}
 .toppings {
   margin-left: 1em;
 }
@@ -26,4 +35,30 @@
   100% {
     background-color: #4285f4;
   }
+}
+
+.print-data {
+  font-size: 8px;
+  display: none;
+  padding-bottom: 15px;
+}
+
+.payment-method-print {
+  text-align: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.positions-label {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
+.powerfood {
+  font-family: "coco", "arial", sans-serif;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 25px;
 }

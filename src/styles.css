@@ -2,3 +2,11 @@
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@font-face {
+  font-family: 'coco';
+  font-style: normal;
+  font-weight: bold;
+  src: url('src/assets/fonts/coco/coco.woff') format('woff');
+  }
+

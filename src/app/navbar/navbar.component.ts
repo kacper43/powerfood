@@ -13,11 +13,13 @@ export class NavbarComponent implements OnInit {
 
   constructor(public orderService: OrderService, public dialog: MatDialog) { }
   address = '';
+  customAddress = [];
   private addressSub: Subscription;
   ngOnInit() {
     this.orderService.getAddress();
     this.addressSub = this.orderService.getAddressUpdatedListener().subscribe((address: string) => {
       this.address = address;
+      this.customAddress = this.address.split(/[,]+/);
     });
   }
 

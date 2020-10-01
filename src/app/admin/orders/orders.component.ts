@@ -16,9 +16,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class OrdersComponent implements OnInit, OnDestroy {
   ordersList: Array<Order> = [];
   ordersUpdated: Subscription;
+  statusUpdated: Subscription;
   newOrderCheck;
   newOrders = false;
   audio = new Audio();
+  restaurantStatus: any;
   isAuth = false;
   authSubscription: Subscription;
   constructor(public orderService: OrderService, public dialog: MatDialog, public database: AngularFirestore,
@@ -40,6 +42,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }, 2000);
     this.audio.src = 'http://www.schillmania.com/projects/soundmanager2/demo/mpc/audio/CHINA_1.mp3';
     this.audio.load();
+    this.orderService.checkRestaurantStatus();
+    this.restaurantStatus = this.orderService.getRestaurantStatus();
+    this.statusUpdated = this.orderService.getRestaurantStatusListener().subscribe((resStatus: any) => {
+      this.restaurantStatus = resStatus;
+    });
   }
   ngOnDestroy() {
     if (this.newOrderCheck) {
@@ -50,6 +57,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   playSound() {
     this.audio.play();
+  }
+
+  changeRestaurantStatus(statusInfo) {
+    this.database.collection('status').doc('status').update({status: statusInfo});
   }
 
   logout() {

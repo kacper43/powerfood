@@ -1,30 +1,63 @@
-<button (click)="logout()">logout</button>
-<mat-card *ngFor="let order of ordersList">
+
+<mat-toolbar color="warn">
+  <button mat-raised-button color="accent" (click)="logout()">Wyloguj</button>
+  <button mat-raised-button class="block" (click)="changeRestaurantStatus(false)" *ngIf="restaurantStatus">Zablokuj przyjmowanie zamówień</button>
+  <button mat-raised-button class="allow" (click)="changeRestaurantStatus(true)" *ngIf="!restaurantStatus">Wznów przyjmowanie zamówień</button>
+</mat-toolbar>
+<mat-card *ngFor="let order of ordersList, index as i">
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'accepted'">
     <mat-expansion-panel-header style="background-color: greenyellow;">
       <mat-panel-title>
         {{order.address}}
       </mat-panel-title>
       <mat-panel-description>
-        Zamówienie przyjęto: {{order.orderTime}} | Czas realizacji: {{order.deliveryTime}} min | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
+        Zamówienie przyjęto: {{order.orderTime}} | Czas realizacji: {{order.deliveryTime}} min |
+        Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>Imie i nazwisko: {{order.name}}</p>
-    <p>Email: {{order.email}}</p>
-    <p>Telefon: {{order.phone}}</p>
-    <p>Nr mieszkania: {{order.flatNr}}</p>
-    <p>Piętro: {{order.floor}}</p>
-    <p>Komentarz: {{order.comment}}</p>
-    <div *ngFor="let orderItem of order.orderItems">
-      Pozycja: {{orderItem.name}} {{orderItem.size}} | Cena: {{orderItem.price}} zł x {{orderItem.quantity}} <br>
-      <span *ngIf="orderItem.toppings.length > 0">
-      <b>Dodatki:</b><br>
-      <span class="toppings" *ngFor="let topping of orderItem.toppings">
-        {{topping}}<br>
+
+      <p>Imie i nazwisko: {{order.name}}</p>
+      <p>Email: {{order.email}}</p>
+      <p>Telefon: {{order.phone}}</p>
+      <p>Nr mieszkania: {{order.flatNr}}</p>
+      <p>Piętro: {{order.floor}}</p>
+      <p>Komentarz: {{order.comment}}</p>
+      <div *ngFor="let orderItem of order.orderItems">
+        Pozycja: {{orderItem.name}} {{orderItem.size}} | Cena: {{orderItem.price}} zł x {{orderItem.quantity}} <br>
+        <span *ngIf="orderItem.toppings.length > 0">
+        <b>Dodatki:</b><br>
+        <span class="toppings" *ngFor="let topping of orderItem.toppings">
+          {{topping}}<br>
+        </span>
       </span>
-    </span>
-      <br>
-    </div>
+        <br>
+      </div>
+      <div id="{{ 'print-section' + i }}" class="print-data">
+        <div class="powerfood">POWERFOOD</div>
+        <div>Przyjęto: {{order.orderTime}}</div>
+        <div>Czas dostawy: {{order.deliveryTime}} min</div>
+        <div>Imie i nazwisko: {{order.name}}</div>
+        <div>Email: {{order.email}}</div>
+        <div>Telefon: {{order.phone}}</div>
+        <div>Adres: {{ order.address }}</div>
+        <div>Nr mieszkania: {{order.flatNr}}</div>
+        <div>Piętro: {{order.floor}}</div>
+        <br>
+        <div class="positions-label">POZYCJE:</div>
+        <div *ngFor="let orderItem of order.orderItems">
+          {{orderItem.name}} {{orderItem.size}} | Ilość x {{orderItem.quantity}} <br>
+          <span *ngIf="orderItem.toppings.length > 0">
+          <b>Dodatki:</b><br>
+          <span class="toppings" *ngFor="let topping of orderItem.toppings">
+            {{topping}}<br>
+          </span>
+        </span>
+          <br>
+        </div>
+        <div class="payment-method-print">{{order.paymentMethod}}<br>CENA: {{order.fullPrice}} zł</div>
+        <div>Komentarz: {{order.comment}}</div>
+      </div>
+      <button mat-raised-button color="accent" [useExistingCss]="true" printSectionId="{{ 'print-section' + i }}" disabled ngxPrint>Drukuj zamówienie</button>
   </mat-expansion-panel>
 
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'declined'">

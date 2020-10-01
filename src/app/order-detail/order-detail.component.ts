@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { FormControl } from '@angular/forms';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { MenuService } from '../menu.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -25,7 +26,7 @@ export class OrderDetailComponent implements OnInit {
     name: '',
     phone: '',
     email: '',
-    address: this.orderService.getAddress(),
+    address: this.orderService.getTrimmedAddress(),
     flatNr: '',
     floor: '',
     paymentMethod: '',
@@ -39,7 +40,8 @@ export class OrderDetailComponent implements OnInit {
   position = new FormControl(this.positionOptions[1]);
 
   constructor(private dialogRef: MatDialogRef<OrderDetailComponent>,
-              public orderService: OrderService, public database: AngularFirestore) { }
+              public orderService: OrderService, public database: AngularFirestore, public menuService: MenuService) { }
+
 
   ngOnInit() {
     this.coupons = this.orderService.getCoupons();
@@ -91,6 +93,7 @@ export class OrderDetailComponent implements OnInit {
     // console.log(this.order.orderDate);
     this.order.orderTime = this.orderService.getCurrentTime();
     this.orderService.addOrder(this.order, this.generatedId);
+    this.menuService.reset();
     this.dialogRef.close();
   }
 }

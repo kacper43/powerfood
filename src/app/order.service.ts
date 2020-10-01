@@ -28,6 +28,7 @@ export class OrderService {
   private currentTime: any;
   private currentHour: string;
   private currentMinutes: string;
+  private dayOfWeek: number;
   coupons: Array<{code: string, percentage: number}> = [];
   zones: Array<{distance: number, minCost: number}> = [];
   restaurantStatus: any;
@@ -101,12 +102,16 @@ export class OrderService {
     this.currentMinutes = ('0' + date.getMinutes()).slice(-2);
     this.currentDate =
     (date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2)).toString();
+    this.dayOfWeek = date.getDay();
   }
 
   getHours() {
     return this.currentHour;
   }
 
+  getDayOfTheWeek() {
+    return this.dayOfWeek;
+  }
   getMinutes() {
     return this.currentMinutes;
   }
@@ -157,6 +162,11 @@ export class OrderService {
   }
   getAddress() {
     return this.googleAddress;
+  }
+
+  getTrimmedAddress() {
+    const customAddress = this.googleAddress.split(/[,]+/);
+    return customAddress[0];
   }
 
   add(orderItem) {

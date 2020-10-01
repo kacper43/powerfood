@@ -14,10 +14,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(form: NgForm) {
-    this.authService.registerUser({
-      email: form.value.login,
-      password: form.value.password
-    });
-  }
+  // onSubmit(form: NgForm) {
+  //   this.authService.registerUser({
+  //     email: form.value.login,
+  //     password: form.value.password
+  //   });
+  // }
 }

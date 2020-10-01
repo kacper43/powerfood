@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { RestaurantClosedDialogComponent } from '../restaurant-closed-dialog/restaurant-closed-dialog.component';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { RestaurantClosedDialogComponent } from '../restaurant-closed-dialog/res
 export class MenuComponent implements OnInit, OnDestroy {
 
   constructor(public menuService: MenuService, public orderService: OrderService,
-              public dialog: MatDialog, public database: AngularFirestore) { }
+              public dialog: MatDialog, public database: AngularFirestore, private deviceService: DeviceDetectorService) { }
 
   shoppingCartClass: string;
   isShoppingCartHidden: boolean;
@@ -39,6 +40,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   hour: string;
   minutes: string;
   restaurantStatus: any;
+  dayOfTheWeek: number;
+  isOpened: boolean;
 
 
 
@@ -70,11 +73,11 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.menuService.addCategory('Sosy i napoje', ['80ml', '0,33L', '0,85L']);
-    // this.menuService.addTopping('szynka', [
+    // this.menuService.addTopping('parmezan', [
     //   {
     //     size: '30cm',
     //     price: 4
-    //   },
+    //     },
     //   {
     //     size: '40cm',
     //     price: 5
@@ -84,6 +87,19 @@ export class MenuComponent implements OnInit, OnDestroy {
     //     price: 6
     //   }
     // ]);
+
+    // this.database.collection('menu').add({
+    //   id: 43,
+    //   name: 'Sos ostry',
+    //   category: 'Sosy i napoje',
+    //   sizes: [
+    //     {
+    //       size: '80ml',
+    //       price: 2
+    //     }
+    //   ],
+    //   toppings: ''
+    // });
     this.orderService.checkRestaurantStatus();
     this.restaurantStatus = this.orderService.getRestaurantStatus();
     this.statusUpdated = this.orderService.getRestaurantStatusListener().subscribe((resStatus: any) => {
@@ -92,7 +108,61 @@ export class MenuComponent implements OnInit, OnDestroy {
 
       this.orderService.setCurrentDate();
       this.hour = this.orderService.getHours();
-      if (this.hour >= '12' && this.hour < '22') {
+      this.dayOfTheWeek = this.orderService.getDayOfTheWeek();
+
+      switch (this.dayOfTheWeek) {
+        case 0: // niedziela
+          if (this.hour >= '12' && this.hour < '22') {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+        case 1: // poniedziałek
+          if (this.hour >= '12' && this.hour < '22') {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+        case 2: // wtorek
+          if (this.hour >= '12' && this.hour < '22') {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+        case 3: // środa
+          if (this.hour >= '12' && this.hour < '22') {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+          case 4: // czwartek
+          if (this.hour >= '12' && this.hour <= '23') {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+          case 5: // piątek
+          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour <= '23')) {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+          case 6: // sobota
+          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour <= '23')) {
+            this.isOpened = true;
+          } else {
+            this.isOpened = false;
+          }
+          break;
+
+      }
+      if (this.isOpened) {
 
         if (this.restaurantStatus) {
           this.menuService.fetchToppings();
@@ -119,7 +189,11 @@ export class MenuComponent implements OnInit, OnDestroy {
           });
 
           this.distance = this.orderService.getDistance();
-          this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
+          if (this.deviceService.isDesktop()) {
+            this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
+          } else {
+            this.dialog.open(AdressAutocompleteComponent, {disableClose: true, width: '100vw'});
+          }
         } else {
           this.dialog.open(RestaurantClosedDialogComponent, {
             data: {
@@ -140,7 +214,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   }
   showOrderDetail() {
-    this.dialog.open(OrderDetailComponent);
+    if (this.deviceService.isDesktop()) {
+      this.dialog.open(OrderDetailComponent);
+    } else {
+      this.dialog.open(OrderDetailComponent, {height: '100vh', width: '100vw'});
+    }
+
   }
 
   ngOnDestroy() {

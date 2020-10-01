@@ -1,5 +1,5 @@
 <section>
-  <form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <form fxLayout="column" fxLayoutAlign="center center" #form="ngForm">
     <mat-form-field>
       <input type="text" matInput placeholder="Login" ngModel name="login" required minlength="8" #loginInput="ngModel">
       <mat-error *ngIf="loginInput.value?.length === 0">To pole nie może pozostać puste</mat-error>

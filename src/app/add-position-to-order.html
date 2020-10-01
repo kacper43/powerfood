@@ -1,7 +1,9 @@
 <h1 mat-dialog-title>Może jakieś dodatki?</h1>
-<div mat-dialog-content>
-  <h3>{{data.itemName}} | {{data.itemSize}}</h3>
 
+<div mat-dialog-content>
+
+  <div><h3>{{data.itemName}} | {{data.itemSize}}</h3></div>
+  <div class="toppings">
   <span *ngFor="let topping of data.allToppings">
     <ng-container *ngFor="let toppingInfo of topping.sizes">
       <span class="container" *ngIf="toppingInfo.size == data.itemSize">
@@ -9,6 +11,8 @@
       </span>
     </ng-container>
   </span>
+</div>
+  <div>
   <mat-divider></mat-divider>
 
   <div class="summary">
@@ -16,9 +20,19 @@
     <div class="add-to-order-btn"><button (click)="addToOrderItem();" mat-raised-button color="warn">Dodaj do zamówienia</button></div>
   </div>
 
-
+</div>
 </div>
 <style>
+  ng-container {
+    display: grid;
+  }
+
+  .mat-dialog-content {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-auto-flow: column;
+  }
+
   mat-divider {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -51,7 +65,7 @@
 }
 
 @media screen and (min-width: 800px){
-  .container{
+  .toppings{
   grid-template-columns: repeat(2, 1fr);
   margin-left: 5px;
     margin-right: 5px;

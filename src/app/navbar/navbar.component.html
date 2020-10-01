@@ -1,7 +1,7 @@
 <mat-toolbar class="nav">
-  <div>PowerFood</div>
+  <div class="logo">POWERFOOD</div>
   <div class="address-btn" (click)="changeAddress()" >
-    <span *ngIf="address !== ''">Adres: {{address}}</span>
+    <span *ngIf="address !== ''">Adres: {{customAddress[0]}}</span>
     <span *ngIf="address == ''">Nie podano adresu</span>
   </div>
 </mat-toolbar>

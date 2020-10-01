@@ -21,7 +21,7 @@ export class AuthService {
       // console.log(result);
       this.isAuthenticated = true;
       this.authChange.next(true);
-      this.router.navigate(['/admin/orders']);
+      this.router.navigate(['/orders']);
     });
   }
 
@@ -30,7 +30,7 @@ export class AuthService {
       // console.log(result);
       this.isAuthenticated = true;
       this.authChange.next(true);
-      this.router.navigate(['/admin/orders']);
+      this.router.navigate(['/orders']);
     });
 
 

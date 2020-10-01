@@ -11,14 +11,16 @@ import { MenuEditComponent } from './menu-edit/menu-edit.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
 import { AuthGuard } from './auth/auth.guard';
 
+
 const routes: Routes = [
-  { path: 'menu', component: MenuComponent},
+  { path: '', component: MenuComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'admin/orders', component: OrdersComponent, canActivate: [AuthGuard]},
-  { path: 'admin/editmenu', component: EditMenuComponent, canActivate: [AuthGuard]},
+  { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard]},
+  { path: 'editmenu', component: EditMenuComponent, canActivate: [AuthGuard]},
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard]},
-  { path: 'orderstatus/:id', component: OrderStatusComponent}
+  { path: 'orderstatus/:id', component: OrderStatusComponent},
+
 
 ];
 

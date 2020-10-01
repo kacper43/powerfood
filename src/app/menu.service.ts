@@ -15,14 +15,13 @@ private menu: any = [];
 categories: Array<{name: string, sizes: Array<string>}> = [];
 
 fetchMenu() {
-  this.database.collection('menu').get().toPromise().then( querySnapshot => {
+  this.database.collection('menu', ref => ref.orderBy('id')).get().toPromise().then( querySnapshot => {
     querySnapshot.forEach( doc => {
       this.menu.push(doc.data());
       this.menu[this.menu.length - 1].id = doc.id;
       // console.log(doc.id, ' => ', doc.data());
     });
   });
-  // console.log(this.menu);
 
 }
 // tslint:disable-next-line: member-ordering
@@ -57,6 +56,8 @@ private toppings: Topping[] = [
     });
   }
 
+
+
   fetchCategories() {
     let cat: any;
     this.categories = [];
@@ -86,4 +87,9 @@ private toppings: Topping[] = [
     return this.categories;
   }
 
+  reset() {
+    this.menu = [];
+    this.categories = [];
+    this.toppings = [];
+  }
 }

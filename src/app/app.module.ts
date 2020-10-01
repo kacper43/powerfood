@@ -28,6 +28,8 @@ import { OrderStatusComponent } from './order-status/order-status.component';
 import { RestaurantClosedDialogComponent } from './restaurant-closed-dialog/restaurant-closed-dialog.component';
 import { AuthService } from './auth/auth.service';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
    declarations: [
@@ -59,9 +61,10 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
       MatDialogModule,
       AngularFireModule.initializeApp(environment.firebase),
       AngularFirestoreModule,
-      AngularFireAuthModule
+      AngularFireAuthModule,
+      NgxPrintModule
    ],
-   providers: [AuthService, AngularFireAuth],
+   providers: [AuthService, AngularFireAuth, DeviceDetectorService],
    bootstrap: [
       AppComponent
    ],
