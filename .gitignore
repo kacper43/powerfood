@@ -10,7 +10,10 @@
 # dependencies
 /node_modules
 
+# environment variables
 /environments
+
+#index html
 /index.html
 
 # profiling files
