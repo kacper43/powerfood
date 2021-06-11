@@ -29,7 +29,7 @@
     "cookieconsent": "^3.1.1",
     "firebase": "^7.21.0",
     "hammerjs": "^2.0.8",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "ngx-cookieconsent": "^2.2.3",
     "ngx-device-detector": "^2.0.0",
     "ngx-google-places-autocomplete": "^2.0.4",
