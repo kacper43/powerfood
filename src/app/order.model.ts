@@ -16,4 +16,8 @@ export interface Order {
   orderTime?: string;
   deliveryTime?: string;
   orderStatus: string;
+  lat?: number;
+  lng?: number;
+  serverTimeStamp?: any;
+  restaurant?: string;
 }

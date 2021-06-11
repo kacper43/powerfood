@@ -1,0 +1,54 @@
+<mat-toolbar color="warn">
+  Edycja zamówień
+  <span class="spacer"></span>
+  <button mat-stroked-button [routerLink]="['/orders']">Powrót do zamówień</button>
+</mat-toolbar>
+
+<mat-tab-group mat-stretch-tabs color="warn">
+  <mat-tab label="MENU">
+    <section class="container">
+    <ng-container *ngFor="let menuItem of menu">
+      <div class="menu-item" (click)="openEditDialog(menuItem, 'menu')" *ngIf="menuItem.isActive == true">
+        <h3>{{menuItem.name}}</h3>
+      </div>
+    </ng-container>
+    <h4>Pozycje nieaktywne:</h4>
+    <ng-container *ngFor="let menuItem of menu">
+      <div class="menu-item not-active" (click)="openEditDialog(menuItem, 'menu')" *ngIf="menuItem.isActive == false">
+        <h3>{{menuItem.name}}</h3>
+      </div>
+    </ng-container>
+    </section>
+  </mat-tab>
+
+  <mat-tab label="KATEGORIE">
+    <section class="container">
+    <ng-container *ngFor="let categoriesItem of categories">
+      <div class="menu-item" (click)="openEditDialog(categoriesItem, 'categories')">
+        <h3>{{categoriesItem.name}}</h3>
+      </div>
+    </ng-container>
+    </section>
+  </mat-tab>
+
+  <mat-tab label="DODATKI">
+    <section class="container">
+    <ng-container *ngFor="let toppingsItem of toppings">
+      <div class="menu-item" (click)="openEditDialog(toppingsItem, 'toppings')">
+        <h3>{{toppingsItem.name}}</h3>
+      </div>
+    </ng-container>
+    </section>
+  </mat-tab>
+
+  <mat-tab label="KUPONY">
+    <section class="container">
+    <ng-container *ngFor="let couponsItem of coupons">
+      <div class="menu-item" (click)="openEditDialog(couponsItem, 'coupons')">
+        <h3>{{couponsItem.code}}</h3><button mat-flat-button color="warn" class="del-coupon" (click)="deleteCoupon(couponsItem.id)">Usuń kupon</button>
+      </div>
+    </ng-container>
+    </section>
+    <button mat-stroked-button type="button" class="add-coupon-btn" (click)="openAddDialog('coupons')">Dodaj nowy kupon</button>
+  </mat-tab>
+</mat-tab-group>

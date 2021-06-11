@@ -6,6 +6,7 @@ import { Order } from 'src/app/order.model';
 import { MatDialog } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AuthService } from 'src/app/auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.orderService.addZone(0.5, 15);
+    console.log(environment.status);
     this.authSubscription = this.authService.authChange.subscribe(authStatus => {
       this.isAuth = authStatus;
     });
@@ -36,11 +38,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.ordersList = this.orderService.getOrders();
     this.ordersUpdated = this.orderService.getOrdersListener().subscribe((orders: Array<any>) => {
       this.ordersList = orders;
+      console.log(this.ordersList);
     });
     this.newOrderCheck = setInterval(() => {
       this.checkOrders();
     }, 2000);
     this.audio.src = 'http://www.schillmania.com/projects/soundmanager2/demo/mpc/audio/CHINA_1.mp3';
+    this.audio.volume = 1;
     this.audio.load();
     this.orderService.checkRestaurantStatus();
     this.restaurantStatus = this.orderService.getRestaurantStatus();
@@ -60,7 +64,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   changeRestaurantStatus(statusInfo) {
-    this.database.collection('status').doc('status').update({status: statusInfo});
+    this.database.collection(environment.status).doc('status').update({status: statusInfo});
   }
 
   logout() {
@@ -84,17 +88,27 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
 
   checkOrders() {
-    for (const order of this.ordersList) {
-      if (order.orderStatus === 'pending') {
-        this.audio.play();
+    if(typeof this.ordersList != 'undefined') {
+      for (const order of this.ordersList) {
+        if (order.orderStatus === 'pending') {
+          this.audio.play();
+        }
       }
     }
   }
 
   acceptOrder(order) {
-    this.dialog.open(OrderDialogComponent, {
+    const dialogRef = this.dialog.open(OrderDialogComponent, {
       data: order
     });
 
+    dialogRef.afterClosed().subscribe(() => {
+      console.log("CLICK!");
+
+      document.getElementById('print-section-0-button').click();
+    })
   }
+
+
+
 }

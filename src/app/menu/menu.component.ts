@@ -15,7 +15,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
@@ -42,7 +42,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   restaurantStatus: any;
   dayOfTheWeek: number;
   isOpened: boolean;
-
+  spinner = true;
 
 
   shoppingCartToggle() {
@@ -72,6 +72,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.spinner = true;
     // this.menuService.addCategory('Sosy i napoje', ['80ml', '0,33L', '0,85L']);
     // this.menuService.addTopping('parmezan', [
     //   {
@@ -112,7 +113,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
       switch (this.dayOfTheWeek) {
         case 0: // niedziela
-          if (this.hour >= '12' && this.hour < '22') {
+          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour < '22')) {
             this.isOpened = true;
           } else {
             this.isOpened = false;
@@ -140,14 +141,14 @@ export class MenuComponent implements OnInit, OnDestroy {
           }
           break;
           case 4: // czwartek
-          if (this.hour >= '12' && this.hour <= '23') {
+          // if (this.hour >= '12' && this.hour <= '23') {
             this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
+          // } else {
+            // this.isOpened = false;
+          // }
           break;
           case 5: // piątek
-          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour <= '23')) {
+          if (this.hour >= '12' && this.hour <= '23') {
             this.isOpened = true;
           } else {
             this.isOpened = false;
@@ -175,6 +176,7 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.shoppingCartClass = 'shopping-cart hidden';
           this.isShoppingCartHidden = true;
           this.shoppingCartBtnClass = 'shopping-cart-btn btn-hidden';
+
           this.orderService.getOrder();
           this.orderSub = this.orderService.getOrderUpdatedListener().subscribe((order: OrderItem[]) => {
             this.order = order;
@@ -187,12 +189,15 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.fullPriceSub = this.orderService.getFullPriceListener().subscribe((price: number) => {
             this.fullPrice = price;
           });
-
           this.distance = this.orderService.getDistance();
           if (this.deviceService.isDesktop()) {
             this.dialog.open(AdressAutocompleteComponent, {disableClose: true});
+            this.spinner = false;
+
           } else {
             this.dialog.open(AdressAutocompleteComponent, {disableClose: true, width: '100vw'});
+            this.spinner = false;
+
           }
         } else {
           this.dialog.open(RestaurantClosedDialogComponent, {
@@ -201,6 +206,7 @@ export class MenuComponent implements OnInit, OnDestroy {
             },
             disableClose: true
           });
+          this.spinner = true;
         }
       } else {
         this.dialog.open(RestaurantClosedDialogComponent, {
@@ -209,15 +215,17 @@ export class MenuComponent implements OnInit, OnDestroy {
           },
           disableClose: true,
         });
+        this.spinner = true;
       }
     });
-
+    this.spinner = true;
   }
+
   showOrderDetail() {
     if (this.deviceService.isDesktop()) {
       this.dialog.open(OrderDetailComponent);
     } else {
-      this.dialog.open(OrderDetailComponent, {height: '100vh', width: '100vw'});
+      this.dialog.open(OrderDetailComponent, {width: '100vw'});
     }
 
   }

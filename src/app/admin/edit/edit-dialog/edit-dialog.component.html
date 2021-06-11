@@ -1,0 +1,81 @@
+
+<div *ngIf="data.itemType == 'menu'">
+<h1 mat-dialog-title>Szczegóły pozycji</h1>
+  <form #f="ngForm" (ngSubmit)="updateItem(f)">
+    <div mat-dialog-content>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Nazwa</mat-label>
+        <input [(ngModel)]="itemToChange.name" matInput name="name" ngModel>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="legacy">
+        <mat-label>Dodatki</mat-label>
+        <textarea [(ngModel)]="itemToChange.toppings" matInput name="toppings" ngModel></textarea>
+      </mat-form-field>
+      <br><br>
+      <div *ngFor="let itemSizes of itemToChange.sizes, index as i">
+        <mat-divider></mat-divider>
+        <mat-form-field appearance="legacy">
+          <mat-label>{{"Rozmiar  #" + (i+1)}}: </mat-label>
+          <input [(ngModel)]="itemSizes.size" matInput name="{{'size' + i}}" ngModel>
+        </mat-form-field>
+        <mat-form-field appearance="legacy">
+          <mat-label>{{"Cena  #" + (i+1)}}: </mat-label>
+          <input [(ngModel)]="itemSizes.price" matInput name="{{'price' + i}}" ngModel>
+        </mat-form-field>
+        <button type="button" mat-stroked-button color="warn" (click)="removeSize(i)">Usuń rozmiar</button>
+
+      </div>
+      <br>
+      <button type="button" mat-raised-button color="accent" (click)="newSize()" class="code-btn">Dodaj nowy rozmiar</button>
+      <br>
+
+      <div>
+        <mat-form-field appearance="Legacy" class="is-active">
+          <mat-label>Czy pozycja ma być aktywna?</mat-label>
+          <mat-select name="isActive" [(ngModel)]="isActive" placeholder="Czy pozycja ma być aktywna?">
+            <mat-option value="0">Nie</mat-option>
+            <mat-option value="1">Tak</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <br>
+
+
+
+
+
+    </div>
+    <div mat-dialog-actions>
+    <button  style="margin-right: 1em" mat-raised-button type="submit">Zapisz zmiany</button>
+  </div>
+  </form>
+</div>
+
+
+
+<div *ngIf="data.itemType == 'coupons'">
+  <h1 mat-dialog-title>Szczegóły kuponu</h1>
+    <form #f="ngForm" (ngSubmit)="updateCoupon(f)">
+      <div mat-dialog-content>
+
+        <mat-form-field appearance="legacy">
+          <mat-label>Kod kuponu</mat-label>
+          <input [(ngModel)]="itemToChange.code" matInput name="code" ngModel required>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="legacy">
+          <mat-label>Wartość kuponu (w %)</mat-label>
+          <input [(ngModel)]="itemToChange.percentage" matInput name="percentage" ngModel required>
+        </mat-form-field>
+        <br>
+      </div>
+
+      <div mat-dialog-actions>
+      <button  style="margin-right: 1em" mat-raised-button [disabled]="f.invalid" type="submit">Zapisz zmiany</button>
+    </div>
+    </form>
+  </div>
+
+

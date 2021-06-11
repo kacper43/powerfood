@@ -6,10 +6,9 @@ import { RegisterComponent } from './auth/register/register.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
 import { OrdersComponent } from './admin/orders/orders.component';
 import { EditMenuComponent } from './admin/edit-menu/edit-menu.component';
-
-import { MenuEditComponent } from './menu-edit/menu-edit.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
 import { AuthGuard } from './auth/auth.guard';
+import { EditComponent } from './admin/edit/edit.component';
 
 
 const routes: Routes = [
@@ -18,7 +17,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard]},
   { path: 'editmenu', component: EditMenuComponent, canActivate: [AuthGuard]},
-  { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard]},
+  { path: 'edit', component: EditComponent, canActivate: [AuthGuard]},
   { path: 'orderstatus/:id', component: OrderStatusComponent},
 
 

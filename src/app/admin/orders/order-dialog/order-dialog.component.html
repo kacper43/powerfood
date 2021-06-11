@@ -17,6 +17,10 @@
   <br>
 </div>
 
+<agm-map [zoom]="16" [latitude]="data.lat" [longitude]="data.lng">
+  <agm-marker [latitude]="data.lat" [longitude]="data.lng"></agm-marker>
+</agm-map>
+
 <div mat-dialog-actions>
   <mat-form-field appearance="legacy">
     <mat-label>Czas dostawy</mat-label>
@@ -31,6 +35,33 @@
       <mat-option value="90">90 min</mat-option>
     </mat-select>
   </mat-form-field>
+
+  <!-- <div id="print-section" class="print-data">
+        <div class="powerfood">POWERFOOD</div>
+        <div>Przyjęto: {{order.orderTime}}</div>
+        <div>Czas dostawy: {{order.deliveryTime}} min</div>
+        <div>Imie i nazwisko: {{order.name}}</div>
+        <div>Email: {{order.email}}</div>
+        <div>Telefon: {{order.phone}}</div>
+        <div>Adres: {{ order.address }}</div>
+        <div>Nr mieszkania: {{order.flatNr}}</div>
+        <div>Piętro: {{order.floor}}</div>
+        <br>
+        <div class="positions-label">POZYCJE:</div>
+        <div *ngFor="let orderItem of order.orderItems">
+          {{orderItem.name}} {{orderItem.size}} | Ilość x {{orderItem.quantity}} <br>
+          <span *ngIf="orderItem.toppings.length > 0">
+          <b>Dodatki:</b><br>
+          <span class="toppings" *ngFor="let topping of orderItem.toppings">
+            {{topping}}<br>
+          </span>
+        </span>
+          <br>
+        </div>
+        <div class="payment-method-print">{{order.paymentMethod}}<br>CENA: {{order.fullPrice}} zł</div>
+        <div>Komentarz: {{order.comment}}</div>
+      </div>
+      <button type="button" id="printBtn" color="accent" [useExistingCss]="true" printSectionId="print-section" ngxPrint>Drukuj zamówienie</button> -->
   <button mat-raised-button color="accept" (click)="acceptOrder(order.id, selectedValue)">Akceptuj zamówienie</button>
 
   <button mat-raised-button color="warn" (click)="declineOrder(order.id)">ODRZUĆ</button>

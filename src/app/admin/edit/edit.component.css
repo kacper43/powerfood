@@ -1,0 +1,39 @@
+.container{
+  display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.menu-item{
+  margin: 10px;
+  padding: 1em;
+  border: 1px solid #c7c7c7;
+  border-radius: 1em;
+  max-width: 100%;
+  background-color: white;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: rgb(247, 247, 155);
+}
+
+.not-active {
+  background-color: grey;
+}
+
+.del-coupon {
+  float: right;
+  margin-right: 1em;
+  z-index: 20000;
+}
+
+.add-coupon-btn {
+  margin-left: 2em;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

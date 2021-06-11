@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { OrderService } from 'src/app/order.service';
 
@@ -21,11 +21,17 @@ export class OrderDialogComponent implements OnInit {
 
   acceptOrder(id, deliveryTime) {
     this.orderService.changeOrderState(id, deliveryTime, 'accepted');
+    this.orderService.sendEmail(this.order.name, this.order.email, 'accepted', this.order.fullPrice,
+                                this.order.paymentMethod, deliveryTime);
     this.dialogRef.close();
+
+
   }
 
   declineOrder(id) {
     this.orderService.changeOrderState(id, 0, 'declined');
+    this.orderService.sendEmail(this.order.name, this.order.email, 'declined', this.order.fullPrice,
+                                this.order.paymentMethod, 0);
     this.dialogRef.close();
   }
 }

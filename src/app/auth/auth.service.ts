@@ -31,6 +31,7 @@ export class AuthService {
       this.isAuthenticated = true;
       this.authChange.next(true);
       this.router.navigate(['/orders']);
+      localStorage.setItem('loggedUser', authData.email);
     });
 
 
@@ -41,7 +42,7 @@ export class AuthService {
     this.isAuthenticated = false;
     this.authChange.next(false);
     this.router.navigate(['/login']);
-
+    localStorage.removeItem('loggedUser');
   }
 
 

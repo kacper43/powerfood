@@ -1,10 +1,18 @@
+
+<div class="spinner-window" *ngIf="spinner">
+  <svg class="spinner" viewBox="0 0 50 50">
+    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+  </svg>
+</div>
+
+
 <app-navbar></app-navbar>
 
   <mat-tab-group mat-stretch-tabs color="warn">
     <mat-tab *ngFor="let category of categories" label={{category.name}}>
       <section class="container">
       <ng-container *ngFor="let menuItem of menu">
-      <div class="menu-item" *ngIf="menuItem.category === category.name">
+      <div class="menu-item" *ngIf="menuItem.category === category.name && menuItem.isActive == true">
         <h3>{{menuItem.name}}</h3>
         <h5>{{menuItem.toppings}}</h5>
         <mat-divider></mat-divider>

@@ -27,8 +27,11 @@
               "src/custom-theme.scss",
               "src/styles.css",
               "src/assets/fonts/fonts-coco.css"
+
             ],
-            "scripts": []
+            "scripts": [
+
+            ]
           },
           "configurations": {
             "production": {

@@ -3,6 +3,7 @@ import { MenuItem } from './menuItem.model';
 import { Topping } from './topping.model';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class MenuService {
 
 constructor(private database: AngularFirestore) { }
 private menu: any = [];
+private liveMenu: any = [];
+private menuUpdated = new Subject<any[]>();
 categories: Array<{name: string, sizes: Array<string>}> = [];
 
 fetchMenu() {
@@ -22,7 +25,27 @@ fetchMenu() {
       // console.log(doc.id, ' => ', doc.data());
     });
   });
+}
 
+getLiveMenu() {
+    let menuBuffer = [];
+    this.database.collection('menu', ref => ref.orderBy('id')).snapshotChanges().subscribe( data => {
+      menuBuffer = [];
+      data.map( a => {
+        // tslint:disable-next-line: no-shadowed-variable
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        menuBuffer.push(data);
+        menuBuffer[menuBuffer.length - 1].id = id;
+      });
+      this.liveMenu = menuBuffer;
+      this.menuUpdated.next(this.liveMenu);
+    }, error => {
+      // console.log(error);
+    });
+}
+getLiveMenuListener() {
+  return this.menuUpdated.asObservable();
 }
 // tslint:disable-next-line: member-ordering
 private toppings: Topping[] = [
@@ -91,5 +114,15 @@ private toppings: Topping[] = [
     this.menu = [];
     this.categories = [];
     this.toppings = [];
+  }
+
+  changeMenuItem(id, data) {
+    this.database.collection('menu').doc(id).update({
+      name: data.name,
+      category: data.category,
+      isActive: data.isActive,
+      toppings: data.toppings,
+      sizes: data.sizes
+    });
   }
 }

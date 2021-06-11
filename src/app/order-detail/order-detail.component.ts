@@ -7,6 +7,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { FormControl } from '@angular/forms';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { MenuService } from '../menu.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-order-detail',
@@ -33,7 +34,10 @@ export class OrderDetailComponent implements OnInit {
     comment: '',
     orderItems: [],
     fullPrice: 0,
-    orderStatus: 'pending'
+    orderStatus: 'pending',
+    lat: 1,
+    lng: 1,
+    serverTimeStamp: ''
   };
 
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
@@ -92,6 +96,9 @@ export class OrderDetailComponent implements OnInit {
     this.order.orderDate = this.orderService.getCurrentDate();
     // console.log(this.order.orderDate);
     this.order.orderTime = this.orderService.getCurrentTime();
+    this.order.lat = this.orderService.getLat();
+    this.order.lng = this.orderService.getLng();
+    this.order.restaurant = environment.restaurant; // wybór lokalu
     this.orderService.addOrder(this.order, this.generatedId);
     this.menuService.reset();
     this.dialogRef.close();

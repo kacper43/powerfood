@@ -1,8 +1,10 @@
 
 <mat-toolbar color="warn">
-  <button mat-raised-button color="accent" (click)="logout()">Wyloguj</button>
-  <button mat-raised-button class="block" (click)="changeRestaurantStatus(false)" *ngIf="restaurantStatus">Zablokuj przyjmowanie zamówień</button>
-  <button mat-raised-button class="allow" (click)="changeRestaurantStatus(true)" *ngIf="!restaurantStatus">Wznów przyjmowanie zamówień</button>
+    <button mat-raised-button color="accent" (click)="logout()">Wyloguj</button>
+    <button mat-raised-button class="block" (click)="changeRestaurantStatus(false)" *ngIf="restaurantStatus">Zablokuj przyjmowanie zamówień</button>
+    <button mat-raised-button class="allow" (click)="changeRestaurantStatus(true)" *ngIf="!restaurantStatus">Wznów przyjmowanie zamówień</button>
+    <span class="spacer"></span>
+    <button mat-stroked-button [routerLink]="['/edit']">Edytuj menu</button>
 </mat-toolbar>
 <mat-card *ngFor="let order of ordersList, index as i">
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'accepted'">
@@ -57,7 +59,7 @@
         <div class="payment-method-print">{{order.paymentMethod}}<br>CENA: {{order.fullPrice}} zł</div>
         <div>Komentarz: {{order.comment}}</div>
       </div>
-      <button mat-raised-button color="accent" [useExistingCss]="true" printSectionId="{{ 'print-section' + i }}" disabled ngxPrint>Drukuj zamówienie</button>
+      <button mat-raised-button color="accent" [useExistingCss]="true" id="{{ 'print-section-' + i + '-button'}}" printSectionId="{{ 'print-section' + i }}" ngxPrint>Drukuj zamówienie</button>
   </mat-expansion-panel>
 
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'declined'">
@@ -95,4 +97,4 @@
 </mat-card>
 
 
-
+<button mat-raised-button color="warn" (click)="playSound()">Odtwórz dźwięk zamówienia</button>

@@ -18,3 +18,39 @@
  /*change color of underline when focused*/
  background-color: black !important;;
 }
+
+agm-map {
+  height: 400px;
+}
+
+
+.print-data {
+  font-size: 8px;
+  display: none;
+  padding-bottom: 15px;
+}
+
+.payment-method-print {
+  text-align: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.positions-label {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
+.powerfood {
+  font-family: "coco", "arial", sans-serif;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+

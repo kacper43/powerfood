@@ -23,6 +23,10 @@
 </div>
 </div>
 <style>
+  ::root {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
   ng-container {
     display: grid;
   }
@@ -62,23 +66,43 @@
     margin-left: 5px;
     margin-right: 5px;
   }
+  .toppings{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin: 0 5px;
+    overflow-y: scroll;
+  }
 }
 
-@media screen and (min-width: 800px){
+@media (min-width: 800px){
   .toppings{
-  grid-template-columns: repeat(2, 1fr);
-  margin-left: 5px;
-    margin-right: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 0px;
+    margin: 0 5px;
   }
-  }
+}
 
 
-@media screen and (min-width: 1500px){
+@media (min-width: 1500px){
   .container{
-  grid-template-columns: repeat(3, 1fr);
-  margin-left: 5px;
+    grid-template-columns: repeat(3, 1fr);
+    margin-left: 5px;
     margin-right: 5px;
   }
+  .toppings{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 0px;
+    margin: 0 5px;
   }
+}
 
 </style>

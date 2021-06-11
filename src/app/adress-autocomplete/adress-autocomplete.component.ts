@@ -10,8 +10,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AdressAutocompleteComponent implements OnInit {
 
   pizzeriaLocation = {
-    lat: '50.068296',
-    lng: '19.9381723'
+    lat: '0',
+    lng: '0'
   };
 
   location: any;
@@ -34,6 +34,10 @@ export class AdressAutocompleteComponent implements OnInit {
 
   ngOnInit() {
     this.orderService.fetchZones();
+    this.orderService.fetchCoordinates().subscribe(data => {
+      this.pizzeriaLocation = data;
+      console.log(this.pizzeriaLocation);
+    })
     this.zones = this.orderService.getZones();
   }
 
@@ -93,8 +97,8 @@ export class AdressAutocompleteComponent implements OnInit {
     }
   }
 
-  addAddress(address) {
-    this.orderService.setAddress(address);
+  addAddress(add) {
+    this.orderService.setAddress(add, Number(this.address.lat), Number(this.address.lng));
     this.dialogRef.close();
   }
 }

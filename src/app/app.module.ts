@@ -21,7 +21,6 @@ import { OrdersComponent } from './admin/orders/orders.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { AdressAutocompleteComponent } from './adress-autocomplete/adress-autocomplete.component';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
-import { MenuEditComponent } from './menu-edit/menu-edit.component';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { NavbarComponent } from './navbar/navbar.component';
 import { OrderStatusComponent } from './order-status/order-status.component';
@@ -30,6 +29,12 @@ import { AuthService } from './auth/auth.service';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { NgxPrintModule } from 'ngx-print';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EditDialogComponent } from './admin/edit/edit-dialog/edit-dialog.component';
+import { EditComponent } from './admin/edit/edit.component';
+import { AddDialogComponent } from './admin/edit/add-dialog/add-dialog/add-dialog.component';
+import { AgmCoreModule } from '@agm/core';
+
 
 @NgModule({
    declarations: [
@@ -44,11 +49,13 @@ import { NgxPrintModule } from 'ngx-print';
       EditMenuComponent,
       OrdersComponent,
       AdressAutocompleteComponent,
-      MenuEditComponent,
       NavbarComponent,
       OrderDialogComponent,
       OrderStatusComponent,
-      RestaurantClosedDialogComponent
+      RestaurantClosedDialogComponent,
+      EditDialogComponent,
+      EditComponent,
+      AddDialogComponent
    ],
    imports: [
       BrowserModule,
@@ -62,9 +69,14 @@ import { NgxPrintModule } from 'ngx-print';
       AngularFireModule.initializeApp(environment.firebase),
       AngularFirestoreModule,
       AngularFireAuthModule,
-      NgxPrintModule
+      NgxPrintModule,
+      HttpClientModule,
+      AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyDa1M376ysvYyIB5F1Ap6NXyaZdwpjl954'
+      })
+
    ],
-   providers: [AuthService, AngularFireAuth, DeviceDetectorService],
+   providers: [AuthService, AngularFireAuth, DeviceDetectorService, HttpClient],
    bootstrap: [
       AppComponent
    ],
@@ -73,7 +85,9 @@ import { NgxPrintModule } from 'ngx-print';
       AdressAutocompleteComponent,
       OrderDetailComponent,
       OrderDialogComponent,
-      RestaurantClosedDialogComponent
+      RestaurantClosedDialogComponent,
+      EditDialogComponent,
+      AddDialogComponent
    ]
 })
 export class AppModule { }

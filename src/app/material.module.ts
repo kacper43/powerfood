@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import {MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule,
   MatDividerModule, MatListModule, MatTableModule, MatCheckboxModule, MatToolbarModule,
-  MatIconModule, MatBadgeModule, MatTabsModule, MatCardModule, MatExpansionModule, MatTooltipModule} from '@angular/material';
+  MatIconModule, MatBadgeModule, MatTabsModule, MatCardModule, MatExpansionModule, MatTooltipModule,
+  MatSnackBarModule} from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
 
@@ -23,7 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSnackBarModule
   ],
   exports: [
     MatButtonModule,
@@ -41,7 +43,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule {}

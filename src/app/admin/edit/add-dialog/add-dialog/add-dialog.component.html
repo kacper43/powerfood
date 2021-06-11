@@ -1,0 +1,22 @@
+<div *ngIf="data.type == 'coupons'">
+  <h1 mat-dialog-title>Szczegóły kuponu</h1>
+    <form #f="ngForm" (ngSubmit)="createCoupon(f)">
+      <div mat-dialog-content>
+
+        <mat-form-field appearance="legacy">
+          <mat-label>Kod kuponu</mat-label>
+          <input ngModel matInput name="code" ngModel required>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="legacy">
+          <mat-label>Wartość kuponu (w %)</mat-label>
+          <input ngModel matInput name="percentage" ngModel required>
+        </mat-form-field>
+        <br>
+      </div>
+
+      <div mat-dialog-actions>
+      <button  style="margin-right: 1em" mat-raised-button [disabled]="f.invalid" type="submit">Dodaj kupon</button>
+    </div>
+    </form>
+  </div>
