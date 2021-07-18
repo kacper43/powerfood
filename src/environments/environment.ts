@@ -14,9 +14,10 @@ export const environment = {
     appId: '1:381764992932:web:922abf3ac84586b671cb31',
     measurementId: 'G-H40532CK07'
   },
-  restaurant: 'DLUGA',
-  status: 'status',
-  zones: 'zones'
+  restaurant: 'SZAFRANA',
+  status: 'status2',
+  zones: 'zones2',
+  menu: 'menu'
 };
 
 /*

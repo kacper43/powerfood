@@ -109,6 +109,17 @@ export class OrdersComponent implements OnInit, OnDestroy {
     })
   }
 
+  passToOtherRestaurant(order: any) {
+    if(order.restaurant == "SZAFRANA") {
+      order.restaurant = "DLUGA";
+    } else if(order.restaurant == "DLUGA") {
+      order.restaurant = "SZAFRANA";
+    }
+    order.orderStatus = "pending"
+    console.log(order);
+
+    this.orderService.passOrder(order);
+  }
 
 
 }

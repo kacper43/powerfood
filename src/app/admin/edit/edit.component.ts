@@ -19,6 +19,16 @@ export class EditComponent implements OnInit {
   toppings: any;
   categories: any;
   coupons: any;
+  emptyPos = {
+    name: '',
+    sizes: [],
+    category: '',
+    id: '',
+    isActive: false,
+    toppings: '',
+    type: '',
+    isNew: true
+  };
   constructor(private menuService: MenuService, private orderService: OrderService, public dialog: MatDialog,
               private _snackBar: MatSnackBar) { }
 
@@ -66,5 +76,52 @@ export class EditComponent implements OnInit {
   deleteCoupon(couponId: string) {
     this.orderService.deleteCoupon(couponId);
     this.openSnackBar('Usunięto kupon', '');
+  }
+
+  addEmptyPosition() {
+    this.menuService.addNewPosition(this.emptyPos);
+  }
+
+  moveUp(item: any) {
+    if(Number(item.id) > 1) {
+      let targetId = Number(item.id) - 1;
+      let targetFirebaseId;
+      for(let menuItem of this.menu) {
+        if(Number(menuItem.id) == targetId) {
+          console.log('foundIT');
+          targetFirebaseId = menuItem.firebaseId;
+          this.menuService.movePositionUp(item.firebaseId, targetFirebaseId, Number(item.id)).subscribe((statusOK) => {
+            if(statusOK) {
+              this.openSnackBar("Zamieniono kolejność", "");
+            } else {
+              this.openSnackBar("Wystąpił błąd serwera", "");
+            }
+          });
+        }
+      }
+    } else {
+      this.openSnackBar("Nie można zamienić kolejności, pozycja jest pierwsza na liście", "");
+    }
+  }
+  moveDown(item: any) {
+    if(Number(item.id) < this.menu.length) {
+      let targetId = Number(item.id) + 1;
+      let targetFirebaseId;
+      for(let menuItem of this.menu) {
+        if(Number(menuItem.id) == targetId) {
+          console.log('foundIT');
+          targetFirebaseId = menuItem.firebaseId;
+          this.menuService.movePositionDown(item.firebaseId, targetFirebaseId, Number(item.id)).subscribe((statusOK) => {
+            if(statusOK) {
+              this.openSnackBar("Zamieniono kolejność", "");
+            } else {
+              this.openSnackBar("Wystąpił błąd serwera", "");
+            }
+          });
+        }
+      }
+    } else {
+      this.openSnackBar("Nie można zamienić kolejności, pozycja jest ostatnia na liście", "");
+    }
   }
 }

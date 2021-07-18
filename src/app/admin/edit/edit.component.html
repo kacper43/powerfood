@@ -4,12 +4,18 @@
   <button mat-stroked-button [routerLink]="['/orders']">Powrót do zamówień</button>
 </mat-toolbar>
 
+
 <mat-tab-group mat-stretch-tabs color="warn">
   <mat-tab label="MENU">
     <section class="container">
+    <div class="add-position-button" (click)="addEmptyPosition()">+</div>
     <ng-container *ngFor="let menuItem of menu">
       <div class="menu-item" (click)="openEditDialog(menuItem, 'menu')" *ngIf="menuItem.isActive == true">
         <h3>{{menuItem.name}}</h3>
+        <span (click)="$event.stopPropagation()">
+          <button mat-stroked-button (click)=moveUp(menuItem)>Przesuń w górę</button>
+          <button mat-stroked-button (click)=moveDown(menuItem)>Przesuń w dół</button>
+        </span>
       </div>
     </ng-container>
     <h4>Pozycje nieaktywne:</h4>

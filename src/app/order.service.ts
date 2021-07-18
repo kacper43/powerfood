@@ -323,6 +323,11 @@ export class OrderService {
     this.database.collection('orders').doc(id).update({deliveryTime: delivery});
   }
 
+  passOrder(order: any) {
+    this.database.collection('orders').doc(order.id).set(order).then(response => {
+      console.log(response);
+    })
+  }
   sendEmail(nameP: string, emailP: string, orderStatusP: string,
             fullPriceP: number, paymentMethodP: string, deliveryTimeP: number) {
               this.http.post<{message: string}>('http://nodemailservice-env.eba-brunvejf.us-east-2.elasticbeanstalk.com/api/sendemail', {

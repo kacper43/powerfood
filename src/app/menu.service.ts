@@ -3,7 +3,8 @@ import { MenuItem } from './menuItem.model';
 import { Topping } from './topping.model';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +19,10 @@ private menuUpdated = new Subject<any[]>();
 categories: Array<{name: string, sizes: Array<string>}> = [];
 
 fetchMenu() {
-  this.database.collection('menu', ref => ref.orderBy('id')).get().toPromise().then( querySnapshot => {
+  this.database.collection(environment.menu, ref => ref.orderBy('id')).get().toPromise().then( querySnapshot => {
     querySnapshot.forEach( doc => {
       this.menu.push(doc.data());
-      this.menu[this.menu.length - 1].id = doc.id;
+      this.menu[this.menu.length - 1].firebaseId = doc.id;
       // console.log(doc.id, ' => ', doc.data());
     });
   });
@@ -29,14 +30,14 @@ fetchMenu() {
 
 getLiveMenu() {
     let menuBuffer = [];
-    this.database.collection('menu', ref => ref.orderBy('id')).snapshotChanges().subscribe( data => {
+    this.database.collection(environment.menu, ref => ref.orderBy('id')).snapshotChanges().subscribe( data => {
       menuBuffer = [];
       data.map( a => {
         // tslint:disable-next-line: no-shadowed-variable
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
         menuBuffer.push(data);
-        menuBuffer[menuBuffer.length - 1].id = id;
+        menuBuffer[menuBuffer.length - 1].firebaseId = id;
       });
       this.liveMenu = menuBuffer;
       this.menuUpdated.next(this.liveMenu);
@@ -116,13 +117,45 @@ private toppings: Topping[] = [
     this.toppings = [];
   }
 
-  changeMenuItem(id, data) {
-    this.database.collection('menu').doc(id).update({
+  changeMenuItem(firebaseId, data) {
+    this.database.collection(environment.menu).doc(firebaseId).update({
       name: data.name,
       category: data.category,
       isActive: data.isActive,
       toppings: data.toppings,
-      sizes: data.sizes
+      sizes: data.sizes,
+      isNew: data.isNew,
+      type: data.type
     });
+  }
+
+  addNewPosition(data: any) {
+    let id = this.menu.length + 1;
+    data.id = id;
+    this.database.collection(environment.menu).add(data).then(response => {
+      console.log(response);
+    });
+  }
+
+  movePositionUp(firebaseId: string, targetFirebaseId: string, newId: number): Observable<boolean> {
+    let status = new Subject<boolean>();
+    let status$ = status.asObservable();
+    this.database.collection(environment.menu).doc(firebaseId).update({id: newId-1}).then(() => {
+      this.database.collection(environment.menu).doc(targetFirebaseId).update({id: newId});
+      console.log(firebaseId, targetFirebaseId, newId);
+      status.next(true);
+    });
+    return status$;
+  }
+
+  movePositionDown(firebaseId: string, targetFirebaseId: string, newId: number): Observable<boolean> {
+    let status = new Subject<boolean>();
+    let status$ = status.asObservable();
+    this.database.collection(environment.menu).doc(firebaseId).update({id: newId+1}).then(() => {
+      this.database.collection(environment.menu).doc(targetFirebaseId).update({id: newId});
+      console.log(firebaseId, targetFirebaseId, newId);
+      status.next(true);
+    });
+    return status$;
   }
 }

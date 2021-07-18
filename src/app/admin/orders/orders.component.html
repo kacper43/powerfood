@@ -9,12 +9,13 @@
 <mat-card *ngFor="let order of ordersList, index as i">
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'accepted'">
     <mat-expansion-panel-header style="background-color: greenyellow;">
-      <mat-panel-title>
+      <mat-panel-title style="display: flex; justify-items: center; align-items: center;">
         {{order.address}}
       </mat-panel-title>
       <mat-panel-description>
         Zamówienie przyjęto: {{order.orderTime}} | Czas realizacji: {{order.deliveryTime}} min |
         Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
+        <span (click)="$event.stopPropagation()"><button (click)="passToOtherRestaurant(order)" mat-raised-button style="margin-left: 10px;">Przekaż do drugiego lokalu</button></span>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -85,11 +86,12 @@
 
   <mat-expansion-panel hideToggle *ngIf="order.orderStatus === 'pending'" (click)="acceptOrder(order)" >
     <mat-expansion-panel-header class="pending-order" >
-      <mat-panel-title>
+      <mat-panel-title style="display: flex; justify-items: center; align-items: center;">
         {{order.address}}
       </mat-panel-title>
       <mat-panel-description>
         Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
+        <span (click)="$event.stopPropagation()"><button mat-raised-button style="margin-left: 10px;">Przekaż do drugiego lokalu</button></span>
       </mat-panel-description>
     </mat-expansion-panel-header>
 

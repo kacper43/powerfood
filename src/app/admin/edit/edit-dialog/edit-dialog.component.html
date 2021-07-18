@@ -33,10 +33,34 @@
 
       <div>
         <mat-form-field appearance="Legacy" class="is-active">
+          <mat-label>Kategoria</mat-label>
+          <mat-select name="category" [(ngModel)]="category" placeholder="Kategoria">
+            <mat-option value="Pizza">Pizza</mat-option>
+            <mat-option value="Sosy i napoje">Sosy i napoje</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="Legacy" class="is-active">
           <mat-label>Czy pozycja ma być aktywna?</mat-label>
           <mat-select name="isActive" [(ngModel)]="isActive" placeholder="Czy pozycja ma być aktywna?">
             <mat-option value="0">Nie</mat-option>
             <mat-option value="1">Tak</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="Legacy" class="is-active">
+          <mat-label>Czy jest nowością w menu?</mat-label>
+          <mat-select name="isNew" [(ngModel)]="isNew" placeholder="Czy jest nowością w menu?">
+            <mat-option value="0">Nie</mat-option>
+            <mat-option value="1">Tak</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="Legacy" class="is-active">
+          <mat-label>Typ wyróżnienia</mat-label>
+          <mat-select name="type" [(ngModel)]="type" placeholder="Typ wyróżnienia">
+            <mat-option value="none">Bez wyróżnienia</mat-option>
+            <mat-option value="vege">VEGE</mat-option>
+            <mat-option value="spicy">PIKANTNA</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -48,7 +72,7 @@
 
     </div>
     <div mat-dialog-actions>
-    <button  style="margin-right: 1em" mat-raised-button type="submit">Zapisz zmiany</button>
+    <button  style="margin-right: 1em" mat-raised-button type="submit" [disabled]="!category || category.length == 0" >Zapisz zmiany</button>
   </div>
   </form>
 </div>

@@ -13,6 +13,10 @@
       <section class="container">
       <ng-container *ngFor="let menuItem of menu">
       <div class="menu-item" *ngIf="menuItem.category === category.name && menuItem.isActive == true">
+        <div class="ribbon-vege" *ngIf="menuItem.type && menuItem.type == 'vege'"><span>VEGE</span></div>
+        <div class="ribbon-spicy" *ngIf="menuItem.type && menuItem.type == 'spicy'"><span>PIKANTNA</span></div>
+        <div class="ribbon-left" *ngIf="menuItem.isNew"><span>NOWOŚĆ</span></div>
+
         <h3>{{menuItem.name}}</h3>
         <h5>{{menuItem.toppings}}</h5>
         <mat-divider></mat-divider>

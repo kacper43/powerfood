@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 import * as cloneDeep from 'lodash/cloneDeep';
 import { MenuService } from 'src/app/menu.service';
 import { OrderService } from 'src/app/order.service';
@@ -19,10 +19,13 @@ export class EditDialogComponent implements OnInit {
       this.itemToChange = {
         name: '',
         sizes: [],
-        category: '',
         id: '',
         isActive: false,
-        toppings: ''
+        toppings: '',
+        isNew: false,
+        category: 'Pizza',
+        type: 'none'
+
       };
       console.log(this.itemToChange);
     });
@@ -31,6 +34,9 @@ export class EditDialogComponent implements OnInit {
 
    isActive: any;
    itemToChange: any;
+   isNew: any = false;
+   type: string = 'none';
+   category: string = 'Pizza';
 
    ngOnInit() {
     this.itemToChange = cloneDeep(this.data.item);
@@ -40,6 +46,17 @@ export class EditDialogComponent implements OnInit {
       this.isActive = '0';
     }
 
+    if (this.itemToChange.isNew) {
+      this.isNew = '1';
+    } else {
+      this.isNew = '0';
+    }
+
+    this.category = this.itemToChange.category;
+
+    (!this.itemToChange.type || this.itemToChange.type == '') ? this.type = 'none' : this.type = this.itemToChange.type;
+
+    this.type = this.itemToChange.type;
     console.log(this.itemToChange);
   }
 
@@ -52,12 +69,17 @@ export class EditDialogComponent implements OnInit {
   updateItem(f: NgForm) {
     if (this.isActive === '1') { this.isActive = true; }
     if (this.isActive === '0') { this.isActive = false; }
+    if (this.isNew === '1') { this.isNew = true; }
+    if (this.isNew === '0') { this.isNew = false; }
     this.itemToChange.isActive = this.isActive;
+    this.itemToChange.isNew = this.isNew;
+    this.itemToChange.type = this.type;
+    this.itemToChange.category = this.category;
     for (const size of this.itemToChange.sizes) {
       size.price = Number(size.price);
     }
 
-    this.menuService.changeMenuItem(this.itemToChange.id, this.itemToChange);
+    this.menuService.changeMenuItem(this.itemToChange.firebaseId, this.itemToChange);
     this.openSnackBar('Pozycja uaktualniona!', 'OK');
     this.dialogRef.close();
   }

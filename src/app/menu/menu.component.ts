@@ -111,58 +111,65 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.hour = this.orderService.getHours();
       this.dayOfTheWeek = this.orderService.getDayOfTheWeek();
 
-      switch (this.dayOfTheWeek) {
-        case 0: // niedziela
-          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour < '22')) {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
-        case 1: // poniedziałek
-          if (this.hour >= '12' && this.hour < '22') {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
-        case 2: // wtorek
-          if (this.hour >= '12' && this.hour < '22') {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
-        case 3: // środa
-          if (this.hour >= '12' && this.hour < '22') {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
-          case 4: // czwartek
-          // if (this.hour >= '12' && this.hour <= '23') {
-            this.isOpened = true;
-          // } else {
-            // this.isOpened = false;
-          // }
-          break;
-          case 5: // piątek
-          if (this.hour >= '12' && this.hour <= '23') {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
-          case 6: // sobota
-          if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour <= '23')) {
-            this.isOpened = true;
-          } else {
-            this.isOpened = false;
-          }
-          break;
+      // switch (this.dayOfTheWeek) {
+      //   case 0: // niedziela
+      //     if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour < '22')) {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //   case 1: // poniedziałek
+      //     if (this.hour >= '12' && this.hour < '22') {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //   case 2: // wtorek
+      //     if (this.hour >= '12' && this.hour < '22') {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //   case 3: // środa
+      //     if (this.hour >= '12' && this.hour < '22') {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //     case 4: // czwartek
+      //     if (this.hour >= '12' && this.hour <= '23') {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //     case 5: // piątek
+      //     if (this.hour >= '12' && this.hour <= '23') {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
+      //     case 6: // sobota
+      //     if ((this.hour >= '00' && this.hour < '02') || (this.hour >= '12' && this.hour <= '23')) {
+      //       this.isOpened = true;
+      //     } else {
+      //       this.isOpened = false;
+      //     }
+      //     break;
 
+      // }
+
+      if(this.hour > '11' && this.hour < '22') {
+        this.isOpened = true;
+      } else {
+        this.isOpened = false;
       }
+
       if (this.isOpened) {
 
         if (this.restaurantStatus) {
