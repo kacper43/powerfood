@@ -91,7 +91,7 @@
       </mat-panel-title>
       <mat-panel-description>
         Zamówienie przyjęto: {{order.orderTime}} | Łączna kwota: {{order.fullPrice}} zł | {{order.paymentMethod}}
-        <span (click)="$event.stopPropagation()"><button mat-raised-button style="margin-left: 10px;">Przekaż do drugiego lokalu</button></span>
+        <span (click)="$event.stopPropagation()"><button (click)="passToOtherRestaurant(order)" mat-raised-button style="margin-left: 10px;">Przekaż do drugiego lokalu</button></span>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
